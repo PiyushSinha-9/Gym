@@ -1,0 +1,1704 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Six-Day Athletic Gym Companion</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080a09;
+      --panel: #111412;
+      --panel-2: #171b18;
+      --panel-3: #20251f;
+      --text: #f5f7f0;
+      --muted: #a9b1a7;
+      --dim: #737c72;
+      --line: rgba(255, 255, 255, 0.1);
+      --line-strong: rgba(255, 255, 255, 0.18);
+      --green: #9df05b;
+      --teal: #47d7c6;
+      --amber: #f4be4f;
+      --red: #ff6b6b;
+      --steel: #9ca7ff;
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.42);
+      --radius: 8px;
+      --max: 1180px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(135deg, rgba(157, 240, 91, 0.08), transparent 32%),
+        linear-gradient(225deg, rgba(244, 190, 79, 0.07), transparent 28%),
+        linear-gradient(180deg, #0d100e 0%, #080a09 42%, #050605 100%);
+      color: var(--text);
+    }
+
+    button,
+    textarea,
+    input {
+      font: inherit;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .shell {
+      width: min(var(--max), calc(100% - 28px));
+      margin: 0 auto;
+    }
+
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid var(--line);
+      background: rgba(8, 10, 9, 0.88);
+      backdrop-filter: blur(18px);
+    }
+
+    .header-inner {
+      display: grid;
+      gap: 14px;
+      padding: 16px 0 12px;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(157, 240, 91, 0.38);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(145deg, rgba(157, 240, 91, 0.28), rgba(71, 215, 198, 0.12)),
+        #111812;
+      box-shadow: 0 0 28px rgba(157, 240, 91, 0.12);
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1.05rem;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .brand p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .view-toggle {
+      display: flex;
+      gap: 6px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: var(--radius);
+    }
+
+    .view-toggle button,
+    .day-tab,
+    .primary-btn,
+    .ghost-btn,
+    .timer-btn,
+    .icon-btn {
+      border: 0;
+      color: var(--text);
+      cursor: pointer;
+      border-radius: var(--radius);
+      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, color 160ms ease;
+    }
+
+    .view-toggle button {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 11px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+
+    .view-toggle button.active {
+      background: rgba(157, 240, 91, 0.14);
+      color: var(--green);
+    }
+
+    .day-strip-wrap {
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 2px;
+    }
+
+    .day-strip-wrap::-webkit-scrollbar {
+      display: none;
+    }
+
+    .day-strip {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(142px, 1fr);
+      gap: 8px;
+      min-width: max-content;
+    }
+
+    .day-tab {
+      position: relative;
+      display: grid;
+      gap: 5px;
+      text-align: left;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.045);
+      min-height: 72px;
+    }
+
+    .day-tab:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    .day-tab.active {
+      border-color: rgba(157, 240, 91, 0.58);
+      background:
+        linear-gradient(135deg, rgba(157, 240, 91, 0.18), rgba(71, 215, 198, 0.08)),
+        rgba(255, 255, 255, 0.05);
+      box-shadow: inset 0 0 0 1px rgba(157, 240, 91, 0.12);
+    }
+
+    .day-tab .day {
+      font-size: 0.86rem;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .day-tab .focus {
+      font-size: 0.74rem;
+      color: var(--muted);
+      line-height: 1.25;
+    }
+
+    .day-tab .mini-progress {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .day-tab .mini-progress span {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--green), var(--teal));
+    }
+
+    main {
+      padding: 22px 0 42px;
+    }
+
+    .hero {
+      display: grid;
+      gap: 16px;
+      margin-bottom: 16px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(135deg, rgba(157, 240, 91, 0.14), rgba(71, 215, 198, 0.06) 46%, rgba(244, 190, 79, 0.08)),
+        rgba(17, 20, 18, 0.92);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      width: fit-content;
+      margin-bottom: 10px;
+      padding: 6px 8px;
+      border: 1px solid rgba(157, 240, 91, 0.32);
+      background: rgba(157, 240, 91, 0.09);
+      color: var(--green);
+      border-radius: var(--radius);
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .hero h2 {
+      margin: 0;
+      font-size: clamp(1.7rem, 6vw, 3.4rem);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+
+    .hero-copy {
+      margin: 12px 0 0;
+      color: #d8ded5;
+      line-height: 1.55;
+      max-width: 760px;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .stat-card,
+    .panel,
+    .exercise-card,
+    .progress-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(17, 20, 18, 0.88);
+    }
+
+    .stat-card {
+      padding: 12px;
+    }
+
+    .stat-label {
+      color: var(--dim);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    .stat-value {
+      margin-top: 7px;
+      color: var(--text);
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    .progress-wrap {
+      display: grid;
+      gap: 8px;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .bar {
+      height: 10px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius);
+    }
+
+    .bar span {
+      display: block;
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--teal), var(--amber));
+      transition: width 220ms ease;
+    }
+
+    .content-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .panel {
+      padding: 16px;
+    }
+
+    .panel h3,
+    .section-title {
+      margin: 0 0 12px;
+      font-size: 1rem;
+      letter-spacing: 0;
+    }
+
+    .panel p {
+      color: var(--muted);
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 9px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.045);
+      border-radius: var(--radius);
+      color: #d9dfd6;
+      font-size: 0.8rem;
+      line-height: 1.15;
+    }
+
+    .chip.good {
+      border-color: rgba(157, 240, 91, 0.3);
+      color: var(--green);
+      background: rgba(157, 240, 91, 0.08);
+    }
+
+    .chip.warn {
+      border-color: rgba(244, 190, 79, 0.34);
+      color: var(--amber);
+      background: rgba(244, 190, 79, 0.08);
+    }
+
+    .list {
+      display: grid;
+      gap: 8px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      color: #d8ded5;
+      line-height: 1.45;
+    }
+
+    .list li::before {
+      content: "";
+      flex: 0 0 auto;
+      width: 7px;
+      height: 7px;
+      margin-top: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 14px rgba(157, 240, 91, 0.35);
+    }
+
+    .exercise-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .exercise-card {
+      overflow: hidden;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.28);
+    }
+
+    .exercise-top {
+      display: grid;
+      gap: 0;
+    }
+
+    .exercise-visual {
+      min-height: 210px;
+      background: #eef2ec;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .exercise-visual img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 210px;
+      object-fit: contain;
+      background: #eef2ec;
+    }
+
+    .exercise-body {
+      padding: 15px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .exercise-title-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .exercise-title-row h3 {
+      margin: 0;
+      font-size: 1.08rem;
+      letter-spacing: 0;
+      line-height: 1.25;
+    }
+
+    .complete {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .complete input {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--green);
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .metric {
+      display: grid;
+      gap: 4px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: var(--radius);
+    }
+
+    .metric span:first-child {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--dim);
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .metric span:last-child {
+      font-weight: 850;
+      color: var(--text);
+    }
+
+    .detail-grid {
+      display: grid;
+      gap: 11px;
+    }
+
+    .detail-block {
+      padding-top: 2px;
+    }
+
+    .detail-block h4 {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin: 0 0 6px;
+      color: #ecf2e8;
+      font-size: 0.84rem;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .detail-block p,
+    .detail-block li {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    .detail-block ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .actions {
+      display: grid;
+      gap: 8px;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .primary-btn,
+    .ghost-btn,
+    .timer-btn,
+    .icon-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 42px;
+      padding: 10px 12px;
+      font-weight: 800;
+      font-size: 0.86rem;
+    }
+
+    .primary-btn {
+      background: linear-gradient(135deg, var(--green), #65d67a);
+      color: #081008;
+    }
+
+    .ghost-btn,
+    .timer-btn,
+    .icon-btn {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.055);
+      color: var(--text);
+    }
+
+    .primary-btn:hover,
+    .ghost-btn:hover,
+    .timer-btn:hover,
+    .icon-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .timer-btn.running {
+      border-color: rgba(244, 190, 79, 0.44);
+      color: var(--amber);
+      background: rgba(244, 190, 79, 0.08);
+    }
+
+    .icon-btn {
+      width: 42px;
+      padding: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 84px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(0, 0, 0, 0.22);
+      color: var(--text);
+      padding: 11px;
+      outline: none;
+      line-height: 1.45;
+    }
+
+    textarea:focus {
+      border-color: rgba(157, 240, 91, 0.45);
+      box-shadow: 0 0 0 3px rgba(157, 240, 91, 0.08);
+    }
+
+    .reset-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 12px 0 2px;
+    }
+
+    .reset-row p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .rest-card {
+      min-height: 380px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+    }
+
+    .rest-card h2 {
+      margin: 0;
+      font-size: clamp(2rem, 8vw, 4rem);
+      letter-spacing: 0;
+    }
+
+    .rest-card p {
+      max-width: 620px;
+      margin: 12px auto 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .progression-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .progress-card {
+      padding: 16px;
+    }
+
+    .progress-card h3 {
+      margin: 0 0 10px;
+    }
+
+    .week-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+      gap: 9px;
+    }
+
+    .week {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.045);
+    }
+
+    .week strong {
+      display: block;
+      color: var(--green);
+      margin-bottom: 6px;
+    }
+
+    .week span {
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 0.9rem;
+    }
+
+    .svg-icon {
+      width: 17px;
+      height: 17px;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      flex: 0 0 auto;
+    }
+
+    .small-icon {
+      width: 14px;
+      height: 14px;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    @media (min-width: 720px) {
+      .header-inner {
+        padding: 18px 0 14px;
+      }
+
+      .hero {
+        padding: 24px;
+      }
+
+      .hero-grid {
+        grid-template-columns: 1.45fr 0.8fr;
+        align-items: end;
+      }
+
+      .content-grid {
+        grid-template-columns: 0.92fr 1.08fr;
+      }
+
+      .exercise-top {
+        grid-template-columns: 0.42fr 0.58fr;
+      }
+
+      .exercise-visual {
+        border-bottom: 0;
+        border-right: 1px solid var(--line);
+      }
+
+      .metric-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .detail-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .actions {
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+      }
+    }
+
+    @media (min-width: 1020px) {
+      .brand h1 {
+        font-size: 1.2rem;
+      }
+
+      .day-strip {
+        min-width: 0;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        grid-auto-flow: row;
+      }
+
+      .day-tab {
+        min-height: 82px;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .shell {
+        width: min(100% - 20px, var(--max));
+      }
+
+      .brand p {
+        display: none;
+      }
+
+      .view-toggle button span.label {
+        display: none;
+      }
+
+      .exercise-title-row {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .complete {
+        white-space: normal;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <div class="shell header-inner">
+      <div class="brand-row">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 8v8"/><path d="M18 8v8"/><path d="M3 12h18"/><path d="M9 5v14"/><path d="M15 5v14"/></svg>
+          </div>
+          <div>
+            <h1>Athletic Gym Companion</h1>
+            <p>Six-day wrist-aware strength plan</p>
+          </div>
+        </div>
+        <nav class="view-toggle" aria-label="View switcher">
+          <button id="workoutViewBtn" class="active" type="button">
+            <span class="icon-holder"></span><span class="label">Workout</span>
+          </button>
+          <button id="progressionViewBtn" type="button">
+            <span class="icon-holder"></span><span class="label">Progression</span>
+          </button>
+        </nav>
+      </div>
+      <div class="day-strip-wrap" aria-label="Day selector">
+        <div id="dayStrip" class="day-strip"></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell">
+    <div id="app"></div>
+  </main>
+
+  <script>
+    const icons = {
+      workout: '<svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 8v8"/><path d="M18 8v8"/><path d="M3 12h18"/><path d="M9 5v14"/><path d="M15 5v14"/></svg>',
+      trend: '<svg class="svg-icon" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>',
+      clock: '<svg class="svg-icon small-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+      target: '<svg class="svg-icon small-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v3"/><path d="M12 18v3"/><path d="M3 12h3"/><path d="M18 12h3"/></svg>',
+      flame: '<svg class="svg-icon small-icon" viewBox="0 0 24 24"><path d="M12 22c4 0 7-3 7-7 0-3-2-5-4-7-.7 2-1.8 3.2-3 4-1-2-1-4 .2-7C8.8 7.4 5 10.5 5 15c0 4 3 7 7 7z"/></svg>',
+      shield: '<svg class="svg-icon small-icon" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3z"/><path d="M9 12l2 2 4-5"/></svg>',
+      video: '<svg class="svg-icon small-icon" viewBox="0 0 24 24"><path d="M4 7h11a3 3 0 0 1 3 3v4a3 3 0 0 1-3 3H4z"/><path d="M18 10l4-2v8l-4-2"/></svg>',
+      check: '<svg class="svg-icon small-icon" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>',
+      reset: '<svg class="svg-icon small-icon" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v6h6"/></svg>',
+      notes: '<svg class="svg-icon small-icon" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 8h8"/><path d="M8 12h8"/><path d="M8 16h5"/></svg>',
+      play: '<svg class="svg-icon small-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>'
+    };
+
+    const warmups = {
+      upper: {
+        title: "Upper Body Warm-Up",
+        time: "12-15 min total + 2-4 ramp-up sets",
+        items: [
+          "Thoracic foam roll: 1 min",
+          "Cat-cow: 8 reps",
+          "Side-lying rotation: 5/side",
+          "Wall slides or wall windmills: 8 reps",
+          "Band pull-aparts: 2 x 12-15",
+          "Light cable/band face pulls: 1-2 x 15",
+          "Cable serratus punches: 1 x 12/side",
+          "Then do 2-4 ramp-up sets for your first lift"
+        ]
+      },
+      lower: {
+        title: "Lower Body Warm-Up",
+        time: "12-15 min total + 2-4 ramp-up sets",
+        items: [
+          "World's Greatest Stretch: 3/side",
+          "Tibialis raises: 2 x 20",
+          "Glute bridges: 2 x 10",
+          "Bodyweight squats: 2 x 8",
+          "Leg swings front/back + side/side: 10 each",
+          "Light hamstring curl or leg extension: 1 x 15 optional",
+          "Then do 2-4 ramp-up sets for your first lift"
+        ]
+      },
+      athletic: {
+        title: "Athletic / Full Body Warm-Up",
+        time: "12-15 min total + ramp-up sets",
+        items: [
+          "Dynamic hip mobility: 3 min",
+          "Thoracic rotations: 5/side",
+          "Glute bridges: 2 x 10",
+          "Band pull-aparts: 2 x 15",
+          "Light sled march or light carry: 2 easy rounds",
+          "Landmine press ramp-up: 2-3 light sets"
+        ]
+      }
+    };
+
+    const days = [
+      {
+        id: "monday",
+        name: "Monday",
+        focus: "Upper Strength",
+        fullFocus: "Upper Body Strength",
+        mainGoal: "Strong upper body without true maxing.",
+        target: "Chest, lats, mid-back, rear delts, arms",
+        timeBudget: "55-60 min",
+        warmup: "upper",
+        patterns: ["Horizontal press", "Horizontal pull", "Vertical pull", "Rear delts", "Arms"],
+        supersets: ["Face Pull + EZ-Bar Curl", "Curl + Rope Pushdown"],
+        wristNotes: "Keep wrist stacked, not bent backward. If barbell bench irritates the wrist, use neutral-grip DB bench or machine press.",
+        alternatives: [
+          "Bench -> machine chest press / cable press",
+          "Chest-supported row -> seated cable row",
+          "EZ curl -> hammer curl"
+        ],
+        dayRules: ["RPE 7-8. No true maxes."],
+        exercises: [
+          exercise("Barbell Bench Press / Neutral-Grip DB Bench", "4", "4-6", "2-3 min", "7-8", 180, "press", "Chest, triceps, front delts, upper-back stability", "Set your shoulder blades back, keep feet planted, and press with wrists stacked over elbows.", ["Letting wrists bend backward", "Bouncing the bar", "Flaring elbows too aggressively"], "Keep wrist stacked. Use neutral-grip dumbbells if the barbell position feels off.", "Machine chest press / cable press"),
+          exercise("Chest-Supported Row", "4", "6-8", "2 min", "8", 120, "row", "Mid-back, lats, rhomboids, traps", "Keep chest on the pad, pull elbows back, and pause briefly while squeezing shoulder blades.", ["Lifting chest off the pad", "Shrugging every rep", "Using momentum"], "", "Seated cable row"),
+          exercise("Incline Neutral-Grip DB Press", "3", "8-10", "90 sec", "7-8", 90, "inclinepress", "Upper chest, triceps, front delts", "Use a neutral grip, lower with control, and press up without letting dumbbells drift behind wrists.", ["Overarching low back", "Touching dumbbells too low", "Wrist extension under load"], "Neutral grip keeps the wrist safer. Stop if wrist comfort drops.", "Use one of the accepted pressing options if needed"),
+          exercise("Neutral-Grip Lat Pulldown / Assisted Pull-Up", "3", "8-10", "90 sec", "8", 90, "pulldown", "Lats, biceps, lower traps", "Pull elbows toward your ribs, keep ribs down, and control the return.", ["Leaning too far back", "Pulling behind the neck", "Letting shoulders shrug up"], "Use handles that keep wrists neutral.", "Use the listed pulldown or assisted pull-up option"),
+          exercise("Face Pull", "3", "15-20", "45-60 sec", "7", 60, "facepull", "Rear delts, external rotators, mid traps", "Pull rope toward upper face with elbows high and thumbs moving slightly behind you.", ["Turning it into a row", "Using too much weight", "Arching low back"], "Use rope handles and keep wrist neutral.", "Use light cable/band face pulls"),
+          exercise("EZ-Bar Curl", "3", "10-12", "60 sec", "8", 60, "curl", "Biceps, brachialis, forearms", "Keep elbows close, curl smoothly, and lower under control.", ["Swinging hips", "Letting wrists bend back", "Cutting the lowering phase short"], "EZ-bar is preferred because it is usually friendlier on the wrist.", "Hammer curl"),
+          exercise("Rope Triceps Pushdown", "2", "12-15", "45-60 sec", "7-8", 60, "pushdown", "Triceps", "Pin elbows near your sides and extend down until arms straighten without shoulder movement.", ["Leaning bodyweight into it", "Elbows drifting forward", "Wrists bending back"], "Rope lets the wrist stay neutral.", "Cable pressdown variation")
+        ]
+      },
+      {
+        id: "tuesday",
+        name: "Tuesday",
+        focus: "Lower Strength",
+        fullFocus: "Lower Body Strength + Core",
+        mainGoal: "Heavy lower-body strength without overloading posterior chain.",
+        target: "Quads, glutes, hamstrings, calves, anti-rotation",
+        timeBudget: "55-60 min",
+        warmup: "lower",
+        patterns: ["Squat", "Controlled hinge", "Unilateral legs", "Calves", "Anti-rotation"],
+        supersets: ["Calf Raise + Cable Crunch", "Leg Curl + Pallof Press"],
+        wristNotes: "Use straps on RDL only if grip fatigue forces wrist compensation. Keep wrist neutral.",
+        alternatives: [
+          "Back squat -> hack squat / leg press",
+          "RDL -> dumbbell RDL / cable pull-through",
+          "Bulgarian split squat -> reverse lunge / split squat machine"
+        ],
+        dayRules: ["Posterior-chain work is moderate. Do not turn RDL into a max-effort lift."],
+        exercises: [
+          exercise("Back Squat / Hack Squat / Leg Press", "4", "5-6", "2-3 min", "7-8", 180, "squat", "Quads, glutes, adductors, trunk bracing", "Brace hard, keep pressure through mid-foot, and move through a depth you can control.", ["Knees collapsing inward", "Losing brace at the bottom", "Chasing load over depth control"], "", "Hack squat / leg press"),
+          exercise("Romanian Deadlift", "3", "6-8", "2 min", "7", 120, "hinge", "Hamstrings, glutes, spinal erectors", "Push hips back, keep the bar close, and stop when hamstrings limit range.", ["Squatting the hinge", "Rounding low back", "Letting bar drift forward"], "Use straps if grip causes wrist compensation.", "Dumbbell RDL / cable pull-through"),
+          exercise("Bulgarian Split Squat", "3", "8/leg", "90 sec", "8", 90, "lunge", "Quads, glutes, adductors", "Keep front foot planted, torso controlled, and descend without bouncing.", ["Front knee caving in", "Pushing mostly from back leg", "Rushing balance"], "Hold dumbbells with neutral wrists.", "Reverse lunge / split squat machine"),
+          exercise("Seated or Lying Leg Curl", "3", "10-12", "60-75 sec", "8", 75, "legcurl", "Hamstrings", "Curl smoothly, squeeze at the top, and control the negative.", ["Hips lifting", "Kicking too fast", "Stopping short of full control"], "", "Use the available seated or lying version"),
+          exercise("Standing Calf Raise", "3", "12-15", "60 sec", "8", 60, "calf", "Calves", "Pause at the top, lower with control, and use full range.", ["Bouncing reps", "Bending knees too much", "Using partial reps only"], "", "Use seated calf raise if standing station is unavailable"),
+          exercise("Cable Crunch", "3", "12-15", "45-60 sec", "8", 60, "core", "Abs, trunk flexion", "Round ribs toward pelvis and keep hips stable.", ["Pulling with arms", "Sitting back into hips", "Neck strain"], "Use rope grip without bending wrists back.", "Machine crunch"),
+          exercise("Pallof Press", "3", "10-12/side", "45-60 sec", "7", 60, "antirotation", "Obliques, deep core, anti-rotation", "Stand tall, press cable away, and resist twisting.", ["Rotating with the cable", "Shrugging shoulders", "Holding breath too long"], "Use a handle position that keeps wrist neutral.", "Band Pallof press")
+        ]
+      },
+      {
+        id: "wednesday",
+        name: "Wednesday",
+        focus: "Pull + Grip",
+        fullFocus: "Pull + Posture + Heavy Carry",
+        mainGoal: "Desk-posture correction, strong back, one heavier weekly carry.",
+        target: "Lats, mid-back, rear delts, traps, biceps, grip",
+        timeBudget: "55-60 min",
+        warmup: "upper",
+        patterns: ["Vertical pull", "Horizontal pull", "Rear delts", "External rotation", "Heavy carry"],
+        supersets: ["Rear Delt Fly + External Rotation", "Hammer Curl can be paired with light rear delt work"],
+        wristNotes: "This is the heavy carry day. Wrist must stay neutral. Stop if grip causes wrist compensation.",
+        alternatives: [
+          "Farmer's carry -> trap-bar carry / suitcase carry",
+          "Lat pulldown -> assisted neutral-grip pull-up",
+          "Rear delt fly -> cable rear delt fly"
+        ],
+        dayRules: ["Moderate pulling volume plus one heavier carry. Do not overload grip again on Saturday."],
+        exercises: [
+          exercise("Neutral-Grip Lat Pulldown", "4", "8-10", "90 sec", "8", 90, "pulldown", "Lats, biceps, lower traps", "Pull elbows down toward your ribs and control the stretch at the top.", ["Pulling behind neck", "Over-leaning back", "Shrugging into the movement"], "Neutral handles are preferred.", "Assisted neutral-grip pull-up"),
+          exercise("Seated Cable Row", "3", "10-12", "90 sec", "8", 90, "row", "Mid-back, lats, rhomboids", "Start tall, pull handles to lower ribs, and pause without leaning far back.", ["Rocking torso", "Shrugging", "Yanking with biceps"], "Use neutral-grip handle when possible.", "Use the closest row machine"),
+          exercise("Single-Arm Cable Row", "3", "10/side", "75 sec", "7-8", 75, "singlearmrow", "Lats, mid-back, anti-rotation", "Keep torso quiet and row elbow back without twisting.", ["Rotating to cheat", "Pulling too high", "Losing rib position"], "Choose a handle that lets your wrist stay straight.", "Single-arm machine row"),
+          exercise("Rear Delt Fly Machine", "3", "15-20", "45-60 sec", "7", 60, "reardelt", "Rear delts, upper back", "Lead with elbows and open arms wide without shrugging.", ["Using traps only", "Going too heavy", "Short range"], "", "Cable rear delt fly"),
+          exercise("Cable External Rotation", "2", "12-15/side", "45 sec", "6-7", 45, "externalrotation", "Rotator cuff, shoulder stability", "Keep elbow tucked and rotate slowly through a pain-free range.", ["Letting elbow drift", "Going too heavy", "Twisting torso"], "Keep wrist straight and light.", "Band external rotation"),
+          exercise("Farmer's Carry / Trap-Bar Carry", "4", "25-40 m", "90 sec", "8", 90, "carry", "Grip, traps, core, hips", "Stand tall, ribs down, walk smoothly, and keep bells from swinging.", ["Leaning backward", "Letting shoulders slump", "Grip causing wrist bend"], "Heavy carry day. Wrist stays neutral or the load is too heavy.", "Trap-bar carry / suitcase carry"),
+          exercise("Hammer Curl", "3", "10-12", "60 sec", "8", 60, "hammercurl", "Brachialis, biceps, forearms", "Curl with thumbs up, elbows close, and slow lowering.", ["Swinging", "Wrists bending", "Elbows drifting forward"], "Neutral grip makes this wrist-aware.", "EZ-bar curl if hammer curl is unavailable")
+        ]
+      },
+      {
+        id: "thursday",
+        name: "Thursday",
+        focus: "Lower Hypertrophy",
+        fullFocus: "Lower Hypertrophy + Unilateral Legs",
+        mainGoal: "Build athletic legs without clean-grip front squat or heavy hinge overload.",
+        target: "Quads, glutes, hamstrings, calves, trunk",
+        timeBudget: "55-60 min",
+        warmup: "lower",
+        patterns: ["Quad-dominant squat", "Hip thrust", "Unilateral legs", "Leg isolation", "Forearm core"],
+        supersets: ["Leg Extension + Seated Leg Curl", "Seated Calf Raise + Dead Bug"],
+        wristNotes: "Lunges should use neutral wrist with dumbbells. Use straps if grip fatigue pulls the wrist out of position.",
+        alternatives: [
+          "Hack squat -> belt squat / leg press",
+          "Hip thrust -> glute bridge machine / cable pull-through",
+          "Walking lunge -> reverse lunge / step-up"
+        ],
+        dayRules: [
+          "No clean-grip front squat for now.",
+          "Front squat is only optional with cross-arm grip, straps grip, or safety-bar variation."
+        ],
+        exercises: [
+          exercise("Hack Squat / Leg Press / Safety-Bar Squat / Belt Squat", "4", "8-10", "2 min", "8", 120, "squatmachine", "Quads, glutes, adductors", "Use a controlled descent, keep knees tracking, and drive through the platform or floor.", ["Locking knees aggressively", "Too much depth loss", "Rushing reps"], "No clean-grip front squat. Use safety-bar or supported options.", "Belt squat / leg press"),
+          exercise("Hip Thrust Machine / Barbell Hip Thrust", "3", "8-10", "90 sec", "7-8", 90, "hipthrust", "Glutes, hamstrings", "Tuck ribs, drive hips up, and squeeze glutes without overextending low back.", ["Arching low back", "Feet too far forward", "Bouncing off the bottom"], "", "Glute bridge machine / cable pull-through"),
+          exercise("Walking DB Lunge", "3", "10/leg", "90 sec", "8", 90, "lunge", "Quads, glutes, adductors", "Take controlled steps, keep torso tall, and push through the front leg.", ["Short unstable steps", "Knee collapse", "Pushing off back foot too much"], "Hold dumbbells with neutral wrists.", "Reverse lunge / step-up"),
+          exercise("Leg Extension", "3", "12-15", "60 sec", "8", 60, "legextension", "Quads", "Extend smoothly, squeeze quads, and lower with control.", ["Swinging the weight", "Letting hips lift", "Using painful knee range"], "", "Use a single-leg version if needed"),
+          exercise("Seated Leg Curl", "2", "12-15", "60 sec", "7", 60, "legcurl", "Hamstrings", "Keep hips down and curl through a controlled range.", ["Bouncing", "Rushing the negative", "Letting hips shift"], "", "Lying leg curl"),
+          exercise("Seated Calf Raise", "3", "12-15", "60 sec", "8", 60, "calf", "Soleus, calves", "Pause at top and bottom, then drive up under control.", ["Tiny range", "Bouncing", "Letting feet roll out"], "", "Standing calf raise"),
+          exercise("Dead Bug", "3", "8-10/side", "45 sec", "7", 45, "deadbug", "Deep core, anti-extension, trunk control", "Keep low back controlled, ribs down, and move the opposite arm and leg slowly.", ["Low back arching", "Moving too fast", "Letting ribs flare"], "No wrist loading. Hands stay free; no palm support.", "Forearm side plank if you want an anti-lateral flexion option")
+        ]
+      },
+      {
+        id: "friday",
+        name: "Friday",
+        focus: "Upper Hypertrophy",
+        fullFocus: "Upper Hypertrophy",
+        mainGoal: "Lean upper-body muscle, not excessive bodybuilding volume.",
+        target: "Chest, back, side delts, arms, posture",
+        timeBudget: "55-60 min",
+        warmup: "upper",
+        patterns: ["Incline press", "Chest press", "Rows", "Pulldown", "Side delts", "Arms"],
+        supersets: ["Cable Lateral Raise + Face Pull", "EZ-Bar Curl + Rope Pushdown"],
+        wristNotes: "No heavy overhead press here. Monday pressing + Friday pressing + Saturday landmine is enough.",
+        alternatives: [
+          "DB incline -> cable incline press",
+          "Machine chest press -> neutral-grip DB press",
+          "Cable lateral raise -> DB lateral raise"
+        ],
+        dayRules: ["Keep reps clean. Use RPE 9 only occasionally on final accessory sets, never on wrist-sensitive movements."],
+        exercises: [
+          exercise("Neutral-Grip DB Incline Press", "3", "8-10", "90 sec", "8", 90, "inclinepress", "Upper chest, triceps, front delts", "Press with neutral wrists, lower to upper chest line, and keep shoulder blades stable.", ["Wrist extension", "Too much arch", "Bouncing dumbbells"], "Neutral grip is preferred for wrist safety.", "Cable incline press"),
+          exercise("Machine Chest Press / Cable Press", "3", "10-12", "90 sec", "8", 90, "machinepress", "Chest, triceps, front delts", "Set handles around mid-chest and press without shoulders rolling forward.", ["Seat too low", "Shoulders shrugging", "Wrists bending backward"], "Choose handle angle that keeps wrist neutral.", "Neutral-grip DB press"),
+          exercise("Chest-Supported Row", "3", "10-12", "90 sec", "8", 90, "row", "Mid-back, lats, rhomboids", "Pull elbows back while chest stays glued to pad.", ["Lifting torso", "Using momentum", "Shrugging"], "", "Use the accepted row option available"),
+          exercise("Neutral-Grip Pulldown", "3", "10-12", "75 sec", "8", 75, "pulldown", "Lats, biceps, lower traps", "Pull down with elbows, pause near upper chest, and control the stretch.", ["Pulling with wrists", "Leaning too far", "Half reps"], "Neutral handles are preferred.", "Assisted neutral-grip pull-up"),
+          exercise("Cable Lateral Raise", "3", "12-15", "45-60 sec", "8", 60, "lateralraise", "Side delts", "Raise arm slightly forward of your body and stop around shoulder height.", ["Shrugging", "Swinging", "Going too heavy"], "Keep wrist quiet and neutral.", "DB lateral raise"),
+          exercise("Face Pull", "2", "15-20", "45-60 sec", "7", 60, "facepull", "Rear delts, rotator cuff, traps", "Pull toward face, open the rope, and keep reps light and crisp.", ["Turning it into a heavy row", "Elbows dropping", "Neck tension"], "Rope grip helps keep wrists neutral.", "Light cable/band face pulls"),
+          exercise("EZ-Bar Curl + Rope Pushdown", "3", "10-12 each", "60 sec", "8", 60, "armsuperset", "Biceps, triceps", "Curl first with steady elbows, then push rope down while keeping elbows pinned.", ["Swinging curls", "Bending wrists back", "Letting pushdown elbows drift"], "Both choices are wrist-aware when wrist stays stacked.", "Use EZ-bar curl or rope pushdown as separate stations if needed")
+        ]
+      },
+      {
+        id: "saturday",
+        name: "Saturday",
+        focus: "Full Body Athletic",
+        fullFocus: "Full Body Athletic Strength",
+        mainGoal: "Strength and skill first, fatigue work later.",
+        target: "Athletic strength, trunk rotation, carries, sled work",
+        timeBudget: "55-60 min",
+        warmup: "athletic",
+        patterns: ["Landmine press", "Neutral row", "Squat", "Sled", "Light carry", "Rotation", "Core"],
+        supersets: ["Cable Woodchop / Cable Lift can pair with Dead Bug if technique stays clean"],
+        wristNotes: "Wednesday is heavy carry day. Saturday carry is lighter, optional, and technique-focused. Prefer suitcase carry for anti-lateral flexion and athletic core work.",
+        alternatives: [
+          "Landmine press -> neutral-grip machine shoulder press",
+          "Sled -> extra suitcase carries or loaded sled march",
+          "Cable woodchop -> landmine rotation / cable lift",
+          "Med ball slam -> cable chop if wrist feels better"
+        ],
+        dayRules: ["Strength and skill first. Sled and carries come after the first three lifts."],
+        exercises: [
+          exercise("Landmine Press", "3", "6-8/side", "90 sec", "7-8", 90, "landminepress", "Shoulders, chest, triceps, core", "Press the bar forward and up while ribs stay down and wrist stays stacked.", ["Overarching low back", "Pressing across the body", "Wrist bending"], "Landmine is a wrist-aware press when grip stays neutral.", "Neutral-grip machine shoulder press"),
+          exercise("Cable Row / Neutral-Grip Row", "3", "8-10", "90 sec", "7-8", 90, "row", "Mid-back, lats, biceps", "Row with a neutral grip, pause briefly, and avoid swinging.", ["Rocking torso", "Shrugging", "Pulling with wrists"], "Neutral handle preferred.", "Use the available neutral-grip row"),
+          exercise("Goblet Squat / Hack Squat / Leg Press", "3", "8-10", "90 sec", "7", 90, "gobletsquat", "Quads, glutes, trunk", "Brace, sit between hips, and drive through mid-foot.", ["Knees collapsing", "Losing torso position", "Depth beyond control"], "Goblet squat requires neutral wrist and comfortable hold.", "Hack squat / leg press"),
+          exercise("Sled Push or Sled Pull", "5-6", "20-30 m", "60-90 sec", "8", 90, "sled", "Quads, glutes, calves, trunk", "Drive powerful steps and keep body angle consistent.", ["Tiny steps", "Rounded back", "Turning it into sloppy conditioning"], "Use handles without wrist extension.", "Extra suitcase carries or loaded sled march"),
+          exercise("Suitcase Carry / Light Farmer's Carry", "2-3", "20-30 m/side", "75-90 sec", "7", 90, "suitcasecarry", "Obliques, grip, traps, anti-lateral flexion", "Walk tall with one side loaded and resist leaning.", ["Leaning into the weight", "Shoulder collapsing", "Grip forcing wrist bend"], "This is lighter and optional. Stop before wrist compensation.", "Light farmer's carry"),
+          exercise("Cable Woodchop / Cable Lift / Med Ball Slam", "3", "8-12/side", "60 sec", "7-8", 60, "rotation", "Obliques, trunk rotation, hips", "Rotate through trunk and hips with control, then return slowly.", ["Yanking with arms", "Over-rotating low back", "Losing balance"], "Cable chop is the safer wrist option if med ball slam feels awkward.", "Landmine rotation / cable lift"),
+          exercise("Dead Bug / Forearm Side Plank", "3", "rounds", "45 sec", "7", 45, "deadbug", "Deep core, anti-extension, anti-lateral flexion", "Keep low back controlled and move slowly without rib flare.", ["Speeding reps", "Low back arching", "Shoulder tension"], "Forearm side plank only. No palm support.", "Use either accepted option")
+        ]
+      }
+    ];
+
+    const sunday = {
+      id: "sunday",
+      name: "Sunday",
+      focus: "Rest Day",
+      fullFocus: "Complete Rest",
+      mainGoal: "Full recovery. No gym training.",
+      target: "Recovery, sleep, joints, nervous system",
+      timeBudget: "No gym session",
+      patterns: ["Rest", "Recovery"],
+      exercises: []
+    };
+
+    const progression = {
+      weeks: [
+        ["Week 1", "Establish clean working weights. RPE 7."],
+        ["Week 2", "Add reps within the given range. Same load where possible."],
+        ["Week 3", "Add small load if all sets hit the top of the rep range."],
+        ["Week 4", "Hardest normal week. RPE 8 on main lifts, occasional RPE 9 only on final accessory sets."],
+        ["Week 5", "Repeat Week 4 or add small load only if joints, sleep, and form are good."],
+        ["Week 6", "Deload."]
+      ],
+      increase: [
+        "You hit the top of the rep range on every set.",
+        "Form is clean.",
+        "Wrist stays neutral.",
+        "No joint pain.",
+        "Final set is still around RPE 8.",
+        "Typical jumps: upper body 1-2.5 kg total, lower body 2.5-5 kg total, accessories smallest possible plate jump."
+      ],
+      reduce: [
+        "Wrist bends backward under load.",
+        "You feel wrist pain, shoulder pinching, or lower-back compensation.",
+        "You miss the bottom of the rep range.",
+        "RPE jumps to 9 too early.",
+        "Sleep and recovery are poor for multiple days.",
+        "You need body English to finish reps."
+      ],
+      deload: [
+        "Every 5-6 weeks, reduce load by 10-15%.",
+        "Reduce total sets by 30-40%.",
+        "Keep the same exercises.",
+        "No max testing.",
+        "Focus on speed, clean reps, mobility, and joint comfort."
+      ],
+      design: "This version keeps Monday strength-focused without weekly maxing, removes clean-grip front squat, keeps warm-ups realistic, orders Saturday skill and strength before fatigue, controls posterior-chain stress, and limits shoulder pressing to sensible doses."
+    };
+
+    const exerciseImages = {
+      "barbell-bench-press-neutral-grip-db-bench": "https://blog.nasm.org/hubfs/bench-press-form.jpg",
+      "chest-supported-row": "https://wger.de/media/exercise-images/1283/e7262f70-7512-408a-8d00-4c499ef632fc.jpg",
+      "incline-neutral-grip-db-press": "https://musculaction.com/images/560-dci-prise-neutre.jpg",
+      "neutral-grip-db-incline-press": "https://musculaction.com/images/560-dci-prise-neutre.jpg",
+      "neutral-grip-lat-pulldown-assisted-pull-up": "https://wger.de/media/exercise-images/1126/0d51a0f2-622f-434b-beb8-1a003c54712a.png",
+      "neutral-grip-lat-pulldown": "https://wger.de/media/exercise-images/1126/0d51a0f2-622f-434b-beb8-1a003c54712a.png",
+      "neutral-grip-pulldown": "https://wger.de/media/exercise-images/1126/0d51a0f2-622f-434b-beb8-1a003c54712a.png",
+      "face-pull": "https://wger.de/media/exercise-images/1732/d13b9adb-968e-4f73-95e6-b16690bcf616.jpg",
+      "ez-bar-curl": "https://wger.de/media/exercise-images/94/6dee2f60-aea2-4f2d-9bf6-aef50c4f9483.png",
+      "rope-triceps-pushdown": "https://wger.de/media/exercise-images/659/a60452f1-e2ea-43fe-baa6-c1a2208d060c.png",
+      "back-squat-hack-squat-leg-press": "https://wger.de/media/exercise-images/1801/60043328-1cfb-4289-9865-aaf64d5aaa28.jpg",
+      "romanian-deadlift": "https://wger.de/media/exercise-images/1652/0306c8c0-70cc-45d4-92de-6fa72ceaa834.webp",
+      "bulgarian-split-squat": "https://wger.de/media/exercise-images/1706/0c5243cc-2539-4005-aee0-d3a8c5d3a32c.jfif",
+      "seated-or-lying-leg-curl": "https://wger.de/media/exercise-images/154/lying-leg-curl-machine-large-1.png",
+      "standing-calf-raise": "https://wger.de/media/exercise-images/146/8b284904-d072-4381-a256-4c81d8fd9c1f.png",
+      "cable-crunch": "https://wger.de/media/exercise-images/1648/63ae02d6-6dd9-4e9e-84da-d4905e78a33c.jpg",
+      "pallof-press": "https://wger.de/media/exercise-images/1194/074e1766-4208-4a67-a211-9721772d99b0.png",
+      "seated-cable-row": "https://wger.de/media/exercise-images/921/2555c4c3-a84d-47db-b83b-cbf721f12e45.png",
+      "single-arm-cable-row": "https://wger.de/media/exercise-images/1636/1bf3ee54-207c-4b53-b057-15adc1dd6128.png",
+      "rear-delt-fly-machine": "https://wger.de/media/exercise-images/1227/57415c3c-2963-4130-9f6f-79f6a96113b6.gif",
+      "cable-external-rotation": "https://wger.de/media/exercise-images/1835/ca4a0b7e-9fdd-4173-843a-f0392824abe1.jpg",
+      "farmer-s-carry-trap-bar-carry": "https://www.mensjournal.com/.image/MjA3MDc3NjU2Mjg4NTY5MzI0/farmers-carry.jpg?profile=w2560&x=50&y=50",
+      "hammer-curl": "https://cdn.prod.openfit.com/uploads/2017/12/06160253/1Open_Fit_Hammer_Curl_0506-770.jpg",
+      "hack-squat-leg-press-safety-bar-squat-belt-squat": "https://wger.de/media/exercise-images/130/Narrow-stance-hack-squats-1-1024x721.png",
+      "hip-thrust-machine-barbell-hip-thrust": "https://wger.de/media/exercise-images/1642/a81ad922-caf5-47f8-99b4-640cb0717436.webp",
+      "walking-db-lunge": "https://wger.de/media/exercise-images/113/Walking-lunges-1.png",
+      "leg-extension": "https://wger.de/media/exercise-images/369/78c915d1-e46d-4d30-8124-65d68664c3ef.png",
+      "seated-leg-curl": "https://wger.de/media/exercise-images/117/seated-leg-curl-large-1.png",
+      "seated-calf-raise": "https://wger.de/media/exercise-images/146/8b284904-d072-4381-a256-4c81d8fd9c1f.png",
+      "dead-bug": "https://www.mensjournal.com/.image/MjE3MTI3ODY2NjA3ODcxMTE0/deadbug-1.jpg?profile=w2560&x=50&y=50",
+      "machine-chest-press-cable-press": "https://wger.de/media/exercise-images/1655/b263c968-e067-4750-916a-d8758a7df23e.webp",
+      "cable-lateral-raise": "https://wger.de/media/exercise-images/1378/7c1fcf34-fb7e-45e7-a0c1-51f296235315.jpg",
+      "ez-bar-curl-rope-pushdown": "https://wger.de/media/exercise-images/94/6dee2f60-aea2-4f2d-9bf6-aef50c4f9483.png",
+      "landmine-press": "https://hips.hearstapps.com/hmg-prod/images/mh-7-11-eb-swole-1657557725.png?crop=0.888888888888889xw%3A1xh%3B0%2C0&resize=980%3A%2A",
+      "cable-row-neutral-grip-row": "https://wger.de/media/exercise-images/143/Cable-seated-rows-2.png",
+      "goblet-squat-hack-squat-leg-press": "https://wger.de/media/exercise-images/203/1c052351-2af0-4227-aeb0-244008e4b0a8.jpeg",
+      "sled-push-or-sled-pull": "https://www.mensjournal.com/.image/MjA3MDY3Mjc2OTYzMjI3MzY4/sled-push.jpg?profile=w2560&x=50&y=50",
+      "suitcase-carry-light-farmer-s-carry": "https://www.mensjournal.com/.image/MjA3MDc3NjU2Mjg4NTY5MzI0/farmers-carry.jpg?profile=w2560&x=50&y=50",
+      "cable-woodchop-cable-lift-med-ball-slam": "https://www.mensjournal.com/.image/NDI6MDAwMDAwMDAwOTM1ODc5/cable-woodchop.jpg?profile=w2560&x=50&y=50",
+      "dead-bug-forearm-side-plank": "https://www.mensjournal.com/.image/MjE3MTI3ODY2NjA3ODcxMTE0/deadbug-1.jpg?profile=w2560&x=50&y=50"
+    };
+
+    function exercise(name, sets, reps, rest, rpe, timerSeconds, visual, targets, description, mistakes, wristNote, alternatives) {
+      return {
+        id: slug(name),
+        name,
+        sets,
+        reps,
+        rest,
+        rpe,
+        timerSeconds,
+        visual,
+        targets,
+        description,
+        mistakes,
+        wristNote,
+        alternatives,
+        videoQuery: `${name} proper form`
+      };
+    }
+
+    function slug(value) {
+      return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    }
+
+    const allDays = [...days, sunday];
+    const storagePrefix = "athletic-gym-companion-v1";
+    const dayStrip = document.getElementById("dayStrip");
+    const app = document.getElementById("app");
+    const workoutViewBtn = document.getElementById("workoutViewBtn");
+    const progressionViewBtn = document.getElementById("progressionViewBtn");
+    workoutViewBtn.querySelector(".icon-holder").innerHTML = icons.workout;
+    progressionViewBtn.querySelector(".icon-holder").innerHTML = icons.trend;
+
+    let selectedDayId = localStorage.getItem(`${storagePrefix}:selectedDay`) || getTodayId();
+    let currentView = localStorage.getItem(`${storagePrefix}:view`) || "workout";
+    let timerIntervals = {};
+
+    function getTodayId() {
+      const ids = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+      return ids[new Date().getDay()];
+    }
+
+    function getDay(dayId) {
+      return allDays.find(day => day.id === dayId) || days[0];
+    }
+
+    function keyFor(dayId, exerciseId, field) {
+      return `${storagePrefix}:${dayId}:${exerciseId}:${field}`;
+    }
+
+    function isComplete(dayId, exerciseId) {
+      return localStorage.getItem(keyFor(dayId, exerciseId, "complete")) === "true";
+    }
+
+    function getNote(dayId, exerciseId) {
+      return localStorage.getItem(keyFor(dayId, exerciseId, "note")) || "";
+    }
+
+    function completionStats(day) {
+      if (!day.exercises.length) return { done: 0, total: 0, pct: 0 };
+      const done = day.exercises.filter(ex => isComplete(day.id, ex.id)).length;
+      const total = day.exercises.length;
+      return { done, total, pct: Math.round((done / total) * 100) };
+    }
+
+    function renderDayStrip() {
+      dayStrip.innerHTML = allDays.map(day => {
+        const stats = completionStats(day);
+        const isActive = day.id === selectedDayId;
+        return `
+          <button class="day-tab ${isActive ? "active" : ""}" type="button" data-day="${day.id}" aria-pressed="${isActive}">
+            <span class="day">${day.name}</span>
+            <span class="focus">${day.focus}</span>
+            <span class="mini-progress" aria-hidden="true"><span style="width:${stats.pct}%"></span></span>
+          </button>
+        `;
+      }).join("");
+      dayStrip.querySelectorAll(".day-tab").forEach(button => {
+        button.addEventListener("click", () => {
+          selectedDayId = button.dataset.day;
+          currentView = "workout";
+          localStorage.setItem(`${storagePrefix}:selectedDay`, selectedDayId);
+          localStorage.setItem(`${storagePrefix}:view`, currentView);
+          render();
+        });
+      });
+    }
+
+    function render() {
+      clearTimers();
+      renderDayStrip();
+      workoutViewBtn.classList.toggle("active", currentView === "workout");
+      progressionViewBtn.classList.toggle("active", currentView === "progression");
+      if (currentView === "progression") {
+        renderProgression();
+      } else {
+        renderWorkout(getDay(selectedDayId));
+      }
+    }
+
+    function renderWorkout(day) {
+      if (day.id === "sunday") {
+        app.innerHTML = `
+          <section class="rest-card panel">
+            <div>
+              <span class="eyebrow">${icons.shield} Complete Rest</span>
+              <h2>Sunday Recovery</h2>
+              <p>Full recovery day. No gym training. Let joints, nervous system, and sleep recover so Monday strength work is productive.</p>
+            </div>
+          </section>
+        `;
+        return;
+      }
+
+      const stats = completionStats(day);
+      const warmup = warmups[day.warmup];
+
+      app.innerHTML = `
+        <section class="hero">
+          <div class="hero-grid">
+            <div>
+              <span class="eyebrow">${icons.workout} ${day.fullFocus}</span>
+              <h2>${day.name}</h2>
+              <p class="hero-copy">${day.mainGoal}</p>
+            </div>
+            <div class="progress-wrap">
+              <div class="progress-meta">
+                <strong>Today's progress</strong>
+                <span id="progressText">${stats.done}/${stats.total} complete</span>
+              </div>
+              <div class="bar"><span id="progressBar" style="width:${stats.pct}%"></span></div>
+              <div class="chip-row">
+                <span class="chip good">${icons.clock} ${day.timeBudget}</span>
+                <span class="chip warn">${icons.shield} Keep wrist neutral</span>
+              </div>
+            </div>
+          </div>
+          <div class="stat-grid">
+            <div class="stat-card"><div class="stat-label">Focus</div><div class="stat-value">${day.fullFocus}</div></div>
+            <div class="stat-card"><div class="stat-label">Target</div><div class="stat-value">${day.target}</div></div>
+          </div>
+        </section>
+
+        <section class="content-grid">
+          <article class="panel">
+            <h3>${warmup.title}</h3>
+            <div class="chip-row" style="margin-bottom:12px">
+              <span class="chip">${icons.clock} ${warmup.time}</span>
+            </div>
+            <ul class="list">${warmup.items.map(item => `<li>${item}</li>`).join("")}</ul>
+          </article>
+
+          <article class="panel">
+            <h3>Execution Rules</h3>
+            <div class="chip-row" style="margin-bottom:12px">
+              ${day.patterns.map(pattern => `<span class="chip">${icons.target} ${pattern}</span>`).join("")}
+            </div>
+            <ul class="list">
+              <li>Visible wrist rule: Keep wrist neutral. If wrist discomfort is above 2/10, switch to the safer alternative.</li>
+              ${day.dayRules.map(rule => `<li>${rule}</li>`).join("")}
+              <li>Time budget: ${day.timeBudget}. Use listed supersets to stay inside 60 minutes.</li>
+            </ul>
+          </article>
+        </section>
+
+        <div class="reset-row">
+          <p>Supersets: ${day.supersets.join(" | ")}</p>
+          <button class="ghost-btn" type="button" id="resetToday">${icons.reset} Reset today</button>
+        </div>
+
+        <section class="exercise-list">
+          ${day.exercises.map((ex, index) => renderExerciseCard(day, ex, index)).join("")}
+        </section>
+
+        <section class="content-grid" style="margin-top:14px">
+          <article class="panel">
+            <h3>Wrist Notes</h3>
+            <p>${day.wristNotes}</p>
+          </article>
+          <article class="panel">
+            <h3>Exercise Alternatives</h3>
+            <ul class="list">${day.alternatives.map(alt => `<li>${alt}</li>`).join("")}</ul>
+          </article>
+        </section>
+      `;
+
+      bindWorkoutEvents(day);
+    }
+
+    function renderExerciseCard(day, ex, index) {
+      const checked = isComplete(day.id, ex.id);
+      const note = escapeHtml(getNote(day.id, ex.id));
+      const videoUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(ex.videoQuery)}`;
+      const hasWrist = Boolean(ex.wristNote);
+      const fallbackImage = illustrationDataUrl(ex, index);
+      const imageUrl = exerciseImages[ex.id] || fallbackImage;
+      return `
+        <article class="exercise-card" data-exercise-card="${ex.id}">
+          <div class="exercise-top">
+            <div class="exercise-visual">
+              <img src="${escapeAttr(imageUrl)}" data-fallback="${escapeAttr(fallbackImage)}" onerror="this.onerror=null;this.src=this.dataset.fallback;" alt="${escapeAttr(ex.name)} exercise image" loading="lazy" />
+            </div>
+            <div class="exercise-body">
+              <div class="exercise-title-row">
+                <div>
+                  <div class="chip-row" style="margin-bottom:8px">
+                    <span class="chip">Exercise ${index + 1}</span>
+                    ${hasWrist ? `<span class="chip warn">${icons.shield} Wrist-aware</span>` : ""}
+                  </div>
+                  <h3>${ex.name}</h3>
+                </div>
+                <label class="complete">
+                  <input type="checkbox" data-complete="${ex.id}" ${checked ? "checked" : ""} />
+                  Complete
+                </label>
+              </div>
+
+              <div class="metric-grid">
+                <div class="metric"><span>${icons.check} Sets</span><span>${ex.sets}</span></div>
+                <div class="metric"><span>${icons.target} Reps</span><span>${ex.reps}</span></div>
+                <div class="metric"><span>${icons.clock} Rest</span><span>${ex.rest}</span></div>
+                <div class="metric"><span>${icons.flame} RPE</span><span>${ex.rpe}</span></div>
+              </div>
+
+              <div class="detail-grid">
+                <div class="detail-block">
+                  <h4>${icons.target} Form cue</h4>
+                  <p>${ex.description}</p>
+                </div>
+                <div class="detail-block">
+                  <h4>${icons.target} Target muscles</h4>
+                  <p>${ex.targets}</p>
+                </div>
+                <div class="detail-block">
+                  <h4>${icons.shield} Mistakes to avoid</h4>
+                  <ul>${ex.mistakes.map(mistake => `<li>${mistake}</li>`).join("")}</ul>
+                </div>
+                <div class="detail-block">
+                  <h4>${icons.shield} Wrist / alternative</h4>
+                  <p>${ex.wristNote || "Keep grip comfortable and wrist neutral."}</p>
+                  <p style="margin-top:6px"><strong>Alternative:</strong> ${ex.alternatives}</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <div class="button-row">
+                  <button class="timer-btn" type="button" data-timer="${ex.id}" data-seconds="${ex.timerSeconds}">
+                    ${icons.clock} <span data-timer-label="${ex.id}">Start rest (${formatTime(ex.timerSeconds)})</span>
+                  </button>
+                  <button class="icon-btn" type="button" aria-label="Reset timer" data-timer-reset="${ex.id}" data-seconds="${ex.timerSeconds}">
+                    ${icons.reset}
+                  </button>
+                  <a class="primary-btn" href="${videoUrl}" target="_blank" rel="noopener noreferrer">
+                    ${icons.video} Watch form video
+                  </a>
+                </div>
+                <label>
+                  <span class="detail-block"><h4>${icons.notes} Notes</h4></span>
+                  <textarea data-note="${ex.id}" placeholder="Weight used, reps completed, wrist comfort, form cues...">${note}</textarea>
+                </label>
+              </div>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function bindWorkoutEvents(day) {
+      document.getElementById("resetToday").addEventListener("click", () => {
+        if (!confirm(`Reset completion and notes for ${day.name}?`)) return;
+        day.exercises.forEach(ex => {
+          localStorage.removeItem(keyFor(day.id, ex.id, "complete"));
+          localStorage.removeItem(keyFor(day.id, ex.id, "note"));
+        });
+        render();
+      });
+
+      app.querySelectorAll("[data-complete]").forEach(input => {
+        input.addEventListener("change", event => {
+          const exId = event.target.dataset.complete;
+          localStorage.setItem(keyFor(day.id, exId, "complete"), event.target.checked ? "true" : "false");
+          updateProgress(day);
+          renderDayStrip();
+        });
+      });
+
+      app.querySelectorAll("[data-note]").forEach(textarea => {
+        textarea.addEventListener("input", event => {
+          localStorage.setItem(keyFor(day.id, event.target.dataset.note, "note"), event.target.value);
+        });
+      });
+
+      app.querySelectorAll("[data-timer]").forEach(button => {
+        button.addEventListener("click", () => toggleTimer(button.dataset.timer, Number(button.dataset.seconds)));
+      });
+
+      app.querySelectorAll("[data-timer-reset]").forEach(button => {
+        button.addEventListener("click", () => resetTimer(button.dataset.timer, Number(button.dataset.seconds)));
+      });
+    }
+
+    function updateProgress(day) {
+      const stats = completionStats(day);
+      document.getElementById("progressText").textContent = `${stats.done}/${stats.total} complete`;
+      document.getElementById("progressBar").style.width = `${stats.pct}%`;
+    }
+
+    function toggleTimer(id, seconds) {
+      const existing = timerIntervals[id];
+      if (existing && existing.running) {
+        clearInterval(existing.interval);
+        existing.running = false;
+        setTimerButton(id, existing.remaining, false);
+        return;
+      }
+
+      const state = existing || { remaining: seconds, running: false, interval: null };
+      state.running = true;
+      setTimerButton(id, state.remaining, true);
+      state.interval = setInterval(() => {
+        state.remaining -= 1;
+        if (state.remaining <= 0) {
+          clearInterval(state.interval);
+          state.running = false;
+          state.remaining = seconds;
+          setTimerButton(id, 0, false, true);
+          return;
+        }
+        setTimerButton(id, state.remaining, true);
+      }, 1000);
+      timerIntervals[id] = state;
+    }
+
+    function resetTimer(id, seconds) {
+      const existing = timerIntervals[id];
+      if (existing && existing.interval) clearInterval(existing.interval);
+      timerIntervals[id] = { remaining: seconds, running: false, interval: null };
+      setTimerButton(id, seconds, false);
+    }
+
+    function setTimerButton(id, seconds, running, done = false) {
+      const label = document.querySelector(`[data-timer-label="${id}"]`);
+      const button = document.querySelector(`[data-timer="${id}"]`);
+      if (!label || !button) return;
+      button.classList.toggle("running", running);
+      if (done) {
+        label.textContent = "Rest done";
+      } else if (running) {
+        label.textContent = `Pause (${formatTime(seconds)})`;
+      } else {
+        label.textContent = `Start rest (${formatTime(seconds)})`;
+      }
+    }
+
+    function clearTimers() {
+      Object.values(timerIntervals).forEach(state => {
+        if (state.interval) clearInterval(state.interval);
+      });
+      timerIntervals = {};
+    }
+
+    function renderProgression() {
+      app.innerHTML = `
+        <section class="hero">
+          <div class="hero-grid">
+            <div>
+              <span class="eyebrow">${icons.trend} Progression</span>
+              <h2>5-6 Week Progression</h2>
+              <p class="hero-copy">Use RPE 7-8 most of the time. RPE 9 only occasionally on final accessory sets. Never RPE 9 on wrist-sensitive movements.</p>
+            </div>
+            <div class="panel">
+              <h3>Wrist Safety Rule</h3>
+              <p>Keep wrist neutral. If wrist discomfort is above 2/10, switch to the safer alternative.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="progression-grid">
+          <article class="progress-card">
+            <h3>Weekly Ramp</h3>
+            <div class="week-grid">
+              ${progression.weeks.map(([week, text]) => `<div class="week"><strong>${week}</strong><span>${text}</span></div>`).join("")}
+            </div>
+          </article>
+
+          <article class="content-grid">
+            <div class="progress-card">
+              <h3>When To Increase Weight</h3>
+              <ul class="list">${progression.increase.map(item => `<li>${item}</li>`).join("")}</ul>
+            </div>
+            <div class="progress-card">
+              <h3>When To Reduce Weight</h3>
+              <ul class="list">${progression.reduce.map(item => `<li>${item}</li>`).join("")}</ul>
+            </div>
+          </article>
+
+          <article class="content-grid">
+            <div class="progress-card">
+              <h3>Deload Rule</h3>
+              <ul class="list">${progression.deload.map(item => `<li>${item}</li>`).join("")}</ul>
+            </div>
+            <div class="progress-card">
+              <h3>Why This Version Works</h3>
+              <p>${progression.design}</p>
+            </div>
+          </article>
+        </section>
+      `;
+    }
+
+    function illustrationDataUrl(ex, index) {
+      const svg = makeIllustrationSvg(ex, index);
+      return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+    }
+
+    function makeIllustrationSvg(ex, index) {
+      const movement = movementDrawing(ex.visual);
+      const name = escapeSvg(ex.name);
+      const targets = escapeSvg(ex.targets.split(",").slice(0, 2).join(" + "));
+      const hue = ["#9df05b", "#47d7c6", "#f4be4f", "#9ca7ff"][index % 4];
+      return `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 520" role="img" aria-label="${name}">
+          <defs>
+            <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#151b16"/>
+              <stop offset="52%" stop-color="#0d100e"/>
+              <stop offset="100%" stop-color="#1b1710"/>
+            </linearGradient>
+            <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="${hue}"/>
+              <stop offset="100%" stop-color="#f5f7f0"/>
+            </linearGradient>
+          </defs>
+          <rect width="720" height="520" fill="url(#bg)"/>
+          <path d="M0 410 C150 350 250 500 410 430 C520 380 610 405 720 340 L720 520 L0 520 Z" fill="rgba(255,255,255,0.045)"/>
+          <g opacity="0.36" stroke="rgba(255,255,255,0.16)" stroke-width="1">
+            <path d="M70 80H650"/>
+            <path d="M70 140H650"/>
+            <path d="M70 200H650"/>
+            <path d="M70 260H650"/>
+            <path d="M70 320H650"/>
+            <path d="M70 380H650"/>
+          </g>
+          <rect x="34" y="30" width="652" height="460" rx="18" fill="rgba(0,0,0,0.08)" stroke="rgba(255,255,255,0.12)"/>
+          <text x="58" y="76" fill="${hue}" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" letter-spacing="0">MOVEMENT GUIDE</text>
+          <text x="58" y="111" fill="#f5f7f0" font-family="Inter, Arial, sans-serif" font-size="29" font-weight="900" letter-spacing="0">${truncateSvg(name, 36)}</text>
+          <text x="58" y="143" fill="#a9b1a7" font-family="Inter, Arial, sans-serif" font-size="18">${truncateSvg(targets, 44)}</text>
+          ${movement}
+          <rect x="58" y="420" width="604" height="42" rx="8" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.1)"/>
+          <circle cx="83" cy="441" r="8" fill="${hue}"/>
+          <text x="104" y="447" fill="#f5f7f0" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800">Watch linked form video before loading heavy</text>
+        </svg>
+      `;
+    }
+
+    function movementDrawing(type) {
+      const common = 'stroke="#f5f7f0" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none"';
+      const accent = 'stroke="url(#accent)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none"';
+      const body = `
+        <circle cx="360" cy="196" r="28" fill="#f5f7f0"/>
+        <path ${common} d="M360 226v78"/>
+      `;
+      const map = {
+        press: `${body}<path ${common} d="M305 252h110"/><path ${accent} d="M285 245h150"/><path ${accent} d="M285 220v50M435 220v50"/><path ${common} d="M338 304l-48 58M382 304l50 58"/><path ${accent} d="M360 168v-42"/><path ${accent} d="M336 134h48"/>`,
+        inclinepress: `${body}<path ${accent} d="M282 330h170"/><path ${common} d="M330 245l-42-38M390 245l42-38"/><path ${accent} d="M285 199l-32-28M435 199l32-28"/><path ${common} d="M338 304l-36 70M382 304l42 66"/>`,
+        row: `${body}<path ${common} d="M320 250l-62 38M400 250l62 38"/><path ${accent} d="M258 288h-74M462 288h74"/><path ${common} d="M338 304l-46 62M382 304l46 62"/><path ${accent} d="M180 288l36-28M540 288l-36-28"/>`,
+        singlearmrow: `${body}<path ${common} d="M360 250l-74 42M392 248l48 32"/><path ${accent} d="M286 292h-86"/><path ${common} d="M338 304l-44 64M382 304l48 64"/><path ${accent} d="M200 292l30-24"/>`,
+        pulldown: `${body}<path ${accent} d="M230 150h260"/><path ${common} d="M330 238l-64-58M390 238l64-58"/><path ${accent} d="M266 180v-36M454 180v-36"/><path ${common} d="M338 304l-42 66M382 304l42 66"/>`,
+        facepull: `${body}<path ${accent} d="M210 214h118M510 214H392"/><path ${common} d="M330 238l-58-24M390 238l58-24"/><path ${common} d="M338 304l-48 62M382 304l50 62"/><path ${accent} d="M250 190l-42 24l42 24M470 190l42 24l-42 24"/>`,
+        curl: `${body}<path ${common} d="M330 246l-34 62M390 246l34 62"/><path ${accent} d="M296 308l-18-48M424 308l18-48"/><path ${common} d="M338 304l-48 64M382 304l48 64"/>`,
+        hammercurl: `${body}<path ${common} d="M328 246l-34 62M392 246l34 62"/><path ${accent} d="M294 308v-58M426 308v-58"/><path ${common} d="M338 304l-48 64M382 304l48 64"/>`,
+        pushdown: `${body}<path ${accent} d="M360 112v64"/><path ${common} d="M326 244l-46 28M394 244l46 28"/><path ${accent} d="M280 272v60M440 272v60"/><path ${common} d="M338 304l-48 64M382 304l48 64"/>`,
+        squat: `${body}<path ${accent} d="M285 176h150"/><path ${common} d="M338 304l-66 50M382 304l66 50"/><path ${common} d="M272 354h-34M448 354h34"/><path ${accent} d="M315 343h90"/><path ${accent} d="M320 292l-35 50M400 292l35 50"/>`,
+        squatmachine: `${body}<path ${accent} d="M250 160h220M250 160l-40 220M470 160l40 220"/><path ${common} d="M338 304l-54 54M382 304l54 54"/><path ${accent} d="M275 360h170"/>`,
+        gobletsquat: `${body}<path ${accent} d="M330 245h60"/><rect x="331" y="226" width="58" height="44" rx="8" fill="url(#accent)"/><path ${common} d="M338 304l-58 58M382 304l58 58"/><path ${accent} d="M280 362h160"/>`,
+        hinge: `${body}<path ${common} d="M360 244l-70 48M360 244l70 48"/><path ${accent} d="M246 326h228"/><path ${common} d="M338 304l-42 64M382 304l42 64"/><path ${accent} d="M290 292l-44 34M430 292l44 34"/>`,
+        lunge: `${body}<path ${common} d="M338 304l-78 58M382 304l82 14"/><path ${accent} d="M240 364h80M430 320h86"/><path ${common} d="M320 250l-50 38M400 250l54 38"/>`,
+        legcurl: `<path ${accent} d="M210 270h300"/><circle cx="306" cy="210" r="28" fill="#f5f7f0"/><path ${common} d="M330 226l92 44"/><path ${common} d="M420 270l54 54"/><path ${accent} d="M474 324l46-36"/><path ${common} d="M300 240l-54 30"/>`,
+        legextension: `<path ${accent} d="M230 300h230"/><circle cx="322" cy="214" r="28" fill="#f5f7f0"/><path ${common} d="M330 242l68 58"/><path ${common} d="M398 300h88"/><path ${accent} d="M486 300l58-26"/><path ${common} d="M306 244l-48 56"/>`,
+        calf: `${body}<path ${common} d="M338 304l-38 78M382 304l38 78"/><path ${accent} d="M286 386h148"/><path ${accent} d="M306 386l-20 28M414 386l20 28"/><path ${common} d="M320 250h80"/>`,
+        hipthrust: `<path ${accent} d="M220 330h280"/><circle cx="320" cy="228" r="28" fill="#f5f7f0"/><path ${common} d="M342 244l98 56"/><path ${common} d="M440 300l56 58"/><path ${common} d="M440 300l-70 58"/><path ${accent} d="M288 292h196"/>`,
+        core: `${body}<path ${common} d="M322 248l-58 70M398 248l58 70"/><path ${accent} d="M360 226c-48 28-64 70-58 118"/><path ${common} d="M338 304l-48 64M382 304l48 64"/>`,
+        antirotation: `${body}<path ${accent} d="M190 252h140"/><path ${common} d="M330 252h110"/><path ${accent} d="M190 252l42-36M190 252l42 36"/><path ${common} d="M338 304l-48 64M382 304l48 64"/>`,
+        forearmplank: `<circle cx="260" cy="248" r="28" fill="#f5f7f0"/><path ${common} d="M288 258l150 54"/><path ${accent} d="M232 316h110M438 312h112"/><path ${common} d="M340 280l-28 36M438 312l60 42"/><path ${accent} d="M230 350h330"/>`,
+        deadbug: `<circle cx="360" cy="246" r="28" fill="#f5f7f0"/><path ${common} d="M360 274v70"/><path ${accent} d="M334 294l-76-52M386 294l76 52"/><path ${common} d="M350 344l-78 46M370 344l78-46"/>`,
+        reardelt: `${body}<path ${common} d="M330 248l-72 26M390 248l72 26"/><path ${accent} d="M258 274l-58-38M462 274l58-38"/><path ${common} d="M338 304l-48 64M382 304l48 64"/>`,
+        externalrotation: `${body}<path ${common} d="M322 246l-42 0M398 246l42 0"/><path ${accent} d="M280 246c-24 26-24 52 0 78M440 246c24 26 24 52 0 78"/><path ${common} d="M338 304l-48 64M382 304l48 64"/>`,
+        lateralraise: `${body}<path ${accent} d="M326 246l-98-34M394 246l98-34"/><path ${common} d="M338 304l-48 64M382 304l48 64"/><path ${accent} d="M228 212h-42M492 212h42"/>`,
+        landminepress: `${body}<path ${accent} d="M260 365l150-150"/><path ${common} d="M390 242l20-27"/><path ${common} d="M336 304l-50 62M384 304l46 62"/><path ${accent} d="M410 215l50-50"/>`,
+        sled: `${body}<path ${common} d="M330 245l-70 66M390 245l62 66"/><path ${accent} d="M210 350h230l42 44H250z"/><path ${accent} d="M248 316l-38 34M452 312l30 38"/><path ${common} d="M338 304l-56 64M382 304l54 64"/>`,
+        carry: `${body}<path ${common} d="M330 248v72M390 248v72"/><rect x="286" y="318" width="46" height="58" rx="8" fill="url(#accent)"/><rect x="388" y="318" width="46" height="58" rx="8" fill="url(#accent)"/><path ${common} d="M338 304l-44 72M382 304l44 72"/>`,
+        suitcasecarry: `${body}<path ${common} d="M330 248v72M390 248l38 32"/><rect x="284" y="318" width="48" height="62" rx="8" fill="url(#accent)"/><path ${accent} d="M426 280l42-34"/><path ${common} d="M338 304l-44 72M382 304l44 72"/>`,
+        rotation: `${body}<path ${common} d="M326 248l-74-42M394 248l74 42"/><path ${accent} d="M235 198c80-76 190-74 260 2"/><path ${accent} d="M488 198l-6-48M488 198l-48-6"/><path ${common} d="M338 304l-48 64M382 304l48 64"/>`,
+        armsuperset: `${body}<path ${common} d="M326 246l-36 60M394 246l46 50"/><path ${accent} d="M290 306l-22-58M440 296v62"/><path ${common} d="M338 304l-48 64M382 304l48 64"/>`,
+        machinepress: `${body}<path ${accent} d="M238 170v220M482 170v220"/><path ${common} d="M328 248l-76 0M392 248l76 0"/><path ${accent} d="M252 248h-42M468 248h42"/><path ${common} d="M338 304l-48 64M382 304l48 64"/>`
+      };
+      return map[type] || map.press;
+    }
+
+    function formatTime(seconds) {
+      const min = Math.floor(seconds / 60);
+      const sec = seconds % 60;
+      return `${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      })[char]);
+    }
+
+    function escapeAttr(value) {
+      return escapeHtml(value).replace(/`/g, "&#096;");
+    }
+
+    function escapeSvg(value) {
+      return String(value).replace(/[&<>]/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;"
+      })[char]);
+    }
+
+    function truncateSvg(value, max) {
+      const clean = escapeSvg(value);
+      return clean.length > max ? `${clean.slice(0, max - 3)}...` : clean;
+    }
+
+    workoutViewBtn.addEventListener("click", () => {
+      currentView = "workout";
+      localStorage.setItem(`${storagePrefix}:view`, currentView);
+      render();
+    });
+
+    progressionViewBtn.addEventListener("click", () => {
+      currentView = "progression";
+      localStorage.setItem(`${storagePrefix}:view`, currentView);
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>
