@@ -15,9 +15,13 @@ No build step is required. This version is dependency-free because this machine 
 - Exercise completion checkboxes saved in `localStorage`.
 - Per-exercise notes saved in `localStorage`.
 - Per-exercise rest timers.
+- Visible per-exercise rest reset controls.
 - Reset button for the selected day.
 - YouTube search links for each exercise form video.
 - Verified remote exercise images, with generated local SVG fallbacks if a remote image fails.
+- Warm-up visual cards with form-search links.
+- Theme swatches for phone-friendly color options.
+- Randomized completion celebration when all exercises for a day are marked done.
 
 ## Editing The Workout
 

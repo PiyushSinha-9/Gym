@@ -27,6 +27,62 @@
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
+    body[data-theme="volt"] {
+      --bg: #080a09;
+      --panel: #111412;
+      --panel-2: #171b18;
+      --panel-3: #20251f;
+      --text: #f5f7f0;
+      --muted: #a9b1a7;
+      --dim: #737c72;
+      --green: #9df05b;
+      --teal: #47d7c6;
+      --amber: #f4be4f;
+      --steel: #9ca7ff;
+    }
+
+    body[data-theme="ember"] {
+      --bg: #0e0a08;
+      --panel: #17120f;
+      --panel-2: #211914;
+      --panel-3: #2c2119;
+      --text: #fff7ed;
+      --muted: #d2bca5;
+      --dim: #947e68;
+      --green: #ffb84d;
+      --teal: #ff6b4a;
+      --amber: #f4df7a;
+      --steel: #ffc0a8;
+    }
+
+    body[data-theme="ocean"] {
+      --bg: #061014;
+      --panel: #0c171c;
+      --panel-2: #101f26;
+      --panel-3: #172a33;
+      --text: #f0fbff;
+      --muted: #a8c3ca;
+      --dim: #6f8c95;
+      --green: #68e1fd;
+      --teal: #7cf7c5;
+      --amber: #f7d46a;
+      --steel: #94b8ff;
+    }
+
+    body[data-theme="mono"] {
+      --bg: #090909;
+      --panel: #121212;
+      --panel-2: #1b1b1b;
+      --panel-3: #242424;
+      --text: #f6f6f3;
+      --muted: #b7b7ae;
+      --dim: #818178;
+      --green: #ffffff;
+      --teal: #cfcfc8;
+      --amber: #9df05b;
+      --steel: #d7d7d0;
+    }
+
     * {
       box-sizing: border-box;
     }
@@ -39,9 +95,9 @@
       margin: 0;
       min-height: 100vh;
       background:
-        linear-gradient(135deg, rgba(157, 240, 91, 0.08), transparent 32%),
-        linear-gradient(225deg, rgba(244, 190, 79, 0.07), transparent 28%),
-        linear-gradient(180deg, #0d100e 0%, #080a09 42%, #050605 100%);
+        linear-gradient(135deg, color-mix(in srgb, var(--green) 10%, transparent), transparent 32%),
+        linear-gradient(225deg, color-mix(in srgb, var(--amber) 8%, transparent), transparent 28%),
+        linear-gradient(180deg, var(--panel) 0%, var(--bg) 42%, #050605 100%);
       color: var(--text);
     }
 
@@ -91,26 +147,37 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 11px;
+      gap: 10px;
       min-width: 0;
     }
 
     .brand-mark {
-      width: 42px;
-      height: 42px;
+      position: relative;
+      width: 46px;
+      height: 46px;
       display: grid;
       place-items: center;
-      border: 1px solid rgba(157, 240, 91, 0.38);
+      flex: 0 0 auto;
+      border: 1px solid color-mix(in srgb, var(--green) 46%, transparent);
       border-radius: var(--radius);
       background:
-        linear-gradient(145deg, rgba(157, 240, 91, 0.28), rgba(71, 215, 198, 0.12)),
-        #111812;
-      box-shadow: 0 0 28px rgba(157, 240, 91, 0.12);
+        linear-gradient(145deg, color-mix(in srgb, var(--green) 28%, transparent), color-mix(in srgb, var(--teal) 16%, transparent)),
+        var(--panel-2);
+      box-shadow: 0 0 28px color-mix(in srgb, var(--green) 18%, transparent);
+      color: var(--green);
+    }
+
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border: 1px solid color-mix(in srgb, var(--text) 16%, transparent);
+      border-radius: 50%;
     }
 
     .brand h1 {
       margin: 0;
-      font-size: 1.05rem;
+      font-size: 1.08rem;
       line-height: 1.1;
       letter-spacing: 0;
     }
@@ -119,6 +186,31 @@
       margin: 4px 0 0;
       color: var(--muted);
       font-size: 0.78rem;
+    }
+
+    .theme-picker {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .theme-dot {
+      position: relative;
+      width: 30px;
+      height: 30px;
+      border: 1px solid var(--line-strong);
+      border-radius: 50%;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--dot-a), var(--dot-b));
+    }
+
+    .theme-dot.active {
+      border-color: var(--text);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--green) 18%, transparent);
     }
 
     .view-toggle {
@@ -423,6 +515,57 @@
       box-shadow: 0 0 14px rgba(157, 240, 91, 0.35);
     }
 
+    .warmup-visual-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 9px;
+      margin-top: 14px;
+    }
+
+    .warmup-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.045);
+    }
+
+    .warmup-card img {
+      display: block;
+      width: 100%;
+      height: 112px;
+      object-fit: contain;
+      background: #eef2ec;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .warmup-card-body {
+      display: grid;
+      gap: 5px;
+      padding: 9px;
+    }
+
+    .warmup-card strong {
+      font-size: 0.82rem;
+      line-height: 1.2;
+    }
+
+    .warmup-card span {
+      color: var(--muted);
+      font-size: 0.74rem;
+      line-height: 1.25;
+    }
+
+    .warmup-video {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      width: fit-content;
+      margin-top: 3px;
+      color: var(--green);
+      font-size: 0.72rem;
+      font-weight: 850;
+    }
+
     .exercise-list {
       display: grid;
       gap: 14px;
@@ -609,6 +752,148 @@
       padding: 10px;
     }
 
+    .timer-reset-btn {
+      min-width: 112px;
+    }
+
+    .celebration-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.68);
+      backdrop-filter: blur(12px);
+      animation: fadeIn 180ms ease;
+    }
+
+    .celebration-card {
+      width: min(430px, 100%);
+      overflow: hidden;
+      border: 1px solid rgba(157, 240, 91, 0.42);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(135deg, rgba(157, 240, 91, 0.16), rgba(71, 215, 198, 0.08)),
+        #101410;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+      text-align: center;
+      animation: popIn 220ms ease;
+    }
+
+    .celebration-graphic {
+      position: relative;
+      height: 168px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(157, 240, 91, 0.22), transparent 42%),
+        rgba(255, 255, 255, 0.035);
+    }
+
+    .celebration-graphic .ring {
+      width: 92px;
+      height: 92px;
+      border: 2px solid var(--green);
+      border-radius: 50%;
+      box-shadow: 0 0 30px rgba(157, 240, 91, 0.38);
+    }
+
+    .celebration-graphic .mark {
+      position: absolute;
+      width: 72px;
+      height: 42px;
+      border-left: 8px solid var(--green);
+      border-bottom: 8px solid var(--green);
+      transform: rotate(-45deg) translate(2px, -2px);
+    }
+
+    .celebration-graphic .burst {
+      position: absolute;
+      width: 10px;
+      height: 34px;
+      border-radius: 999px;
+      background: var(--teal);
+      transform: rotate(var(--r)) translateY(-62px);
+      transform-origin: center 84px;
+      animation: burst 760ms ease both;
+    }
+
+    .celebration-graphic .plate {
+      width: 116px;
+      height: 116px;
+      display: grid;
+      place-items: center;
+      border: 8px solid var(--amber);
+      border-radius: 50%;
+      color: var(--amber);
+      font-size: 2.4rem;
+      font-weight: 950;
+      box-shadow: inset 0 0 0 12px rgba(244, 190, 79, 0.12), 0 0 34px rgba(244, 190, 79, 0.24);
+    }
+
+    .celebration-graphic .meter {
+      width: 210px;
+      height: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .celebration-graphic .meter span {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--teal), var(--amber));
+      animation: fillMeter 900ms ease both;
+    }
+
+    .celebration-card-body {
+      padding: 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .celebration-card h2 {
+      margin: 0;
+      font-size: 1.6rem;
+      letter-spacing: 0;
+    }
+
+    .celebration-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .celebration-card .ghost-btn {
+      justify-self: center;
+      margin-top: 6px;
+      min-width: 128px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: translateY(10px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes burst {
+      from { opacity: 0; transform: rotate(var(--r)) translateY(-30px) scale(0.5); }
+      to { opacity: 1; transform: rotate(var(--r)) translateY(-72px) scale(1); }
+    }
+
+    @keyframes fillMeter {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
     textarea {
       width: 100%;
       min-height: 84px;
@@ -782,12 +1067,41 @@
         width: min(100% - 20px, var(--max));
       }
 
+      .header-inner {
+        gap: 10px;
+        padding: 10px 0 8px;
+      }
+
+      .brand-mark {
+        width: 38px;
+        height: 38px;
+      }
+
+      .brand h1 {
+        font-size: 1rem;
+      }
+
       .brand p {
         display: none;
       }
 
-      .view-toggle button span.label {
-        display: none;
+      .theme-picker {
+        gap: 5px;
+        padding: 5px;
+      }
+
+      .theme-dot {
+        width: 25px;
+        height: 25px;
+      }
+
+      .day-strip {
+        grid-auto-columns: minmax(112px, 1fr);
+      }
+
+      .day-tab {
+        min-height: 62px;
+        padding: 9px 10px;
       }
 
       .exercise-title-row {
@@ -799,9 +1113,26 @@
         white-space: normal;
       }
     }
+
+    @media (max-width: 620px) {
+      .button-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .button-row .primary-btn {
+        grid-column: 1 / -1;
+      }
+
+      .timer-btn,
+      .timer-reset-btn,
+      .button-row .primary-btn {
+        width: 100%;
+      }
+    }
   </style>
 </head>
-<body>
+<body data-theme="volt">
   <header class="app-header">
     <div class="shell header-inner">
       <div class="brand-row">
@@ -810,17 +1141,15 @@
             <svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 8v8"/><path d="M18 8v8"/><path d="M3 12h18"/><path d="M9 5v14"/><path d="M15 5v14"/></svg>
           </div>
           <div>
-            <h1>Athletic Gym Companion</h1>
-            <p>Six-day wrist-aware strength plan</p>
+            <h1>Gym Companion</h1>
+            <p>Wrist-aware athletic plan</p>
           </div>
         </div>
-        <nav class="view-toggle" aria-label="View switcher">
-          <button id="workoutViewBtn" class="active" type="button">
-            <span class="icon-holder"></span><span class="label">Workout</span>
-          </button>
-          <button id="progressionViewBtn" type="button">
-            <span class="icon-holder"></span><span class="label">Progression</span>
-          </button>
+        <nav class="theme-picker" aria-label="Theme selector">
+          <button class="theme-dot" type="button" data-theme="volt" style="--dot-a:#9df05b;--dot-b:#47d7c6" aria-label="Volt theme"></button>
+          <button class="theme-dot" type="button" data-theme="ocean" style="--dot-a:#68e1fd;--dot-b:#7cf7c5" aria-label="Ocean theme"></button>
+          <button class="theme-dot" type="button" data-theme="ember" style="--dot-a:#ffb84d;--dot-b:#ff6b4a" aria-label="Ember theme"></button>
+          <button class="theme-dot" type="button" data-theme="mono" style="--dot-a:#ffffff;--dot-b:#9df05b" aria-label="Mono theme"></button>
         </nav>
       </div>
       <div class="day-strip-wrap" aria-label="Day selector">
@@ -861,6 +1190,15 @@
           "Light cable/band face pulls: 1-2 x 15",
           "Cable serratus punches: 1 x 12/side",
           "Then do 2-4 ramp-up sets for your first lift"
+        ],
+        visuals: [
+          warmupMove("Thoracic foam roll", "Open upper back before pressing.", "https://wger.de/media/exercise-images/1855/a6597ed8-1613-4458-ba56-4b63bc946a35.webp"),
+          warmupMove("Cat-cow", "Move spine slowly, no rushing.", ""),
+          warmupMove("Side-lying rotation", "Rotate through upper back, not low back.", "https://wger.de/media/exercise-images/1582/5094fe30-eea2-4269-b0de-4b8a20558fd7.png"),
+          warmupMove("Wall slides / windmills", "Keep ribs down and shoulders smooth.", ""),
+          warmupMove("Band pull-aparts", "Squeeze shoulder blades lightly.", ""),
+          warmupMove("Face pulls", "Light reps to wake rear delts.", "https://wger.de/media/exercise-images/1732/d13b9adb-968e-4f73-95e6-b16690bcf616.jpg"),
+          warmupMove("Cable serratus punches", "Reach forward without shrugging.", "")
         ]
       },
       lower: {
@@ -874,6 +1212,14 @@
           "Leg swings front/back + side/side: 10 each",
           "Light hamstring curl or leg extension: 1 x 15 optional",
           "Then do 2-4 ramp-up sets for your first lift"
+        ],
+        visuals: [
+          warmupMove("World's Greatest Stretch", "Lunge, reach, rotate, switch sides.", "https://wger.de/media/exercise-images/1868/446e7065-215d-4a91-9da7-9416101442bb.png"),
+          warmupMove("Tibialis raises", "Lift toes toward shins with control.", "https://wger.de/media/exercise-images/1804/691c69b8-c3db-4177-8435-dd3a97d88542.webp"),
+          warmupMove("Glute bridges", "Squeeze glutes, avoid low-back arch.", "https://wger.de/media/exercise-images/1642/a81ad922-caf5-47f8-99b4-640cb0717436.webp"),
+          warmupMove("Bodyweight squats", "Smooth depth and knee tracking.", "https://wger.de/media/exercise-images/977/3124c091-6395-4377-96c5-56048b627ceb.png"),
+          warmupMove("Leg swings", "Controlled front/back and side/side.", ""),
+          warmupMove("Light curl or extension", "Easy blood flow, not fatigue.", "https://wger.de/media/exercise-images/154/lying-leg-curl-machine-large-1.png")
         ]
       },
       athletic: {
@@ -886,6 +1232,14 @@
           "Band pull-aparts: 2 x 15",
           "Light sled march or light carry: 2 easy rounds",
           "Landmine press ramp-up: 2-3 light sets"
+        ],
+        visuals: [
+          warmupMove("Dynamic hip mobility", "Move hips through easy range.", "https://wger.de/media/exercise-images/1867/767631e5-10d2-46b8-b03f-cc298f96963b.png"),
+          warmupMove("Thoracic rotations", "Rotate upper back with control.", "https://wger.de/media/exercise-images/1868/446e7065-215d-4a91-9da7-9416101442bb.png"),
+          warmupMove("Glute bridges", "Prime glutes before athletic work.", "https://wger.de/media/exercise-images/1642/a81ad922-caf5-47f8-99b4-640cb0717436.webp"),
+          warmupMove("Band pull-aparts", "Easy shoulder activation.", ""),
+          warmupMove("Light sled march / carry", "Smooth posture, light effort.", "https://www.mensjournal.com/.image/MjA3MDY3Mjc2OTYzMjI3MzY4/sled-push.jpg?profile=w2560&x=50&y=50"),
+          warmupMove("Landmine ramp-up", "Practice wrist-stacked press path.", "https://hips.hearstapps.com/hmg-prod/images/mh-7-11-eb-swole-1657557725.png?crop=0.888888888888889xw%3A1xh%3B0%2C0&resize=980%3A%2A")
         ]
       }
     };
@@ -1077,41 +1431,6 @@
       exercises: []
     };
 
-    const progression = {
-      weeks: [
-        ["Week 1", "Establish clean working weights. RPE 7."],
-        ["Week 2", "Add reps within the given range. Same load where possible."],
-        ["Week 3", "Add small load if all sets hit the top of the rep range."],
-        ["Week 4", "Hardest normal week. RPE 8 on main lifts, occasional RPE 9 only on final accessory sets."],
-        ["Week 5", "Repeat Week 4 or add small load only if joints, sleep, and form are good."],
-        ["Week 6", "Deload."]
-      ],
-      increase: [
-        "You hit the top of the rep range on every set.",
-        "Form is clean.",
-        "Wrist stays neutral.",
-        "No joint pain.",
-        "Final set is still around RPE 8.",
-        "Typical jumps: upper body 1-2.5 kg total, lower body 2.5-5 kg total, accessories smallest possible plate jump."
-      ],
-      reduce: [
-        "Wrist bends backward under load.",
-        "You feel wrist pain, shoulder pinching, or lower-back compensation.",
-        "You miss the bottom of the rep range.",
-        "RPE jumps to 9 too early.",
-        "Sleep and recovery are poor for multiple days.",
-        "You need body English to finish reps."
-      ],
-      deload: [
-        "Every 5-6 weeks, reduce load by 10-15%.",
-        "Reduce total sets by 30-40%.",
-        "Keep the same exercises.",
-        "No max testing.",
-        "Focus on speed, clean reps, mobility, and joint comfort."
-      ],
-      design: "This version keeps Monday strength-focused without weekly maxing, removes clean-grip front squat, keeps warm-ups realistic, orders Saturday skill and strength before fatigue, controls posterior-chain stress, and limits shoulder pressing to sensible doses."
-    };
-
     const exerciseImages = {
       "barbell-bench-press-neutral-grip-db-bench": "https://blog.nasm.org/hubfs/bench-press-form.jpg",
       "chest-supported-row": "https://wger.de/media/exercise-images/1283/e7262f70-7512-408a-8d00-4c499ef632fc.jpg",
@@ -1155,6 +1474,34 @@
       "dead-bug-forearm-side-plank": "https://www.mensjournal.com/.image/MjE3MTI3ODY2NjA3ODcxMTE0/deadbug-1.jpg?profile=w2560&x=50&y=50"
     };
 
+    const celebrationTypes = [
+      {
+        type: "check",
+        title: "Session Complete",
+        message: "All exercises logged. Keep the form quality high and move on with the day."
+      },
+      {
+        type: "plate",
+        title: "Work Done",
+        message: "Full workout checked off. Strong, controlled, consistent."
+      },
+      {
+        type: "meter",
+        title: "Progress Locked",
+        message: "Today's training block is complete. Recovery starts now."
+      }
+    ];
+
+    function warmupMove(name, cue, image) {
+      return {
+        id: slug(name),
+        name,
+        cue,
+        image,
+        videoQuery: `${name} proper form`
+      };
+    }
+
     function exercise(name, sets, reps, rest, rpe, timerSeconds, visual, targets, description, mistakes, wristNote, alternatives) {
       return {
         id: slug(name),
@@ -1174,6 +1521,29 @@
       };
     }
 
+    function renderWarmupCards(warmup) {
+      if (!warmup.visuals || !warmup.visuals.length) return "";
+      return `
+        <div class="warmup-visual-grid">
+          ${warmup.visuals.map(move => {
+            const fallback = warmupFallbackDataUrl(move);
+            const image = move.image || fallback;
+            const url = `https://www.youtube.com/results?search_query=${encodeURIComponent(move.videoQuery)}`;
+            return `
+              <article class="warmup-card">
+                <img src="${escapeAttr(image)}" data-fallback="${escapeAttr(fallback)}" onerror="this.onerror=null;this.src=this.dataset.fallback;" alt="${escapeAttr(move.name)} warm-up image" loading="lazy" />
+                <div class="warmup-card-body">
+                  <strong>${move.name}</strong>
+                  <span>${move.cue}</span>
+                  <a class="warmup-video" href="${url}" target="_blank" rel="noopener noreferrer">${icons.video} Form</a>
+                </div>
+              </article>
+            `;
+          }).join("")}
+        </div>
+      `;
+    }
+
     function slug(value) {
       return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
     }
@@ -1182,13 +1552,9 @@
     const storagePrefix = "athletic-gym-companion-v1";
     const dayStrip = document.getElementById("dayStrip");
     const app = document.getElementById("app");
-    const workoutViewBtn = document.getElementById("workoutViewBtn");
-    const progressionViewBtn = document.getElementById("progressionViewBtn");
-    workoutViewBtn.querySelector(".icon-holder").innerHTML = icons.workout;
-    progressionViewBtn.querySelector(".icon-holder").innerHTML = icons.trend;
 
     let selectedDayId = localStorage.getItem(`${storagePrefix}:selectedDay`) || getTodayId();
-    let currentView = localStorage.getItem(`${storagePrefix}:view`) || "workout";
+    let selectedTheme = localStorage.getItem(`${storagePrefix}:theme`) || "volt";
     let timerIntervals = {};
 
     function getTodayId() {
@@ -1234,24 +1600,32 @@
       dayStrip.querySelectorAll(".day-tab").forEach(button => {
         button.addEventListener("click", () => {
           selectedDayId = button.dataset.day;
-          currentView = "workout";
           localStorage.setItem(`${storagePrefix}:selectedDay`, selectedDayId);
-          localStorage.setItem(`${storagePrefix}:view`, currentView);
           render();
         });
       });
     }
 
+    function applyTheme(theme) {
+      selectedTheme = theme;
+      document.body.dataset.theme = theme;
+      localStorage.setItem(`${storagePrefix}:theme`, theme);
+      document.querySelectorAll(".theme-dot").forEach(button => {
+        button.classList.toggle("active", button.dataset.theme === theme);
+      });
+    }
+
+    function bindThemePicker() {
+      document.querySelectorAll(".theme-dot").forEach(button => {
+        button.addEventListener("click", () => applyTheme(button.dataset.theme));
+      });
+      applyTheme(selectedTheme);
+    }
+
     function render() {
       clearTimers();
       renderDayStrip();
-      workoutViewBtn.classList.toggle("active", currentView === "workout");
-      progressionViewBtn.classList.toggle("active", currentView === "progression");
-      if (currentView === "progression") {
-        renderProgression();
-      } else {
-        renderWorkout(getDay(selectedDayId));
-      }
+      renderWorkout(getDay(selectedDayId));
     }
 
     function renderWorkout(day) {
@@ -1297,26 +1671,14 @@
           </div>
         </section>
 
-        <section class="content-grid">
-          <article class="panel">
-            <h3>${warmup.title}</h3>
-            <div class="chip-row" style="margin-bottom:12px">
-              <span class="chip">${icons.clock} ${warmup.time}</span>
-            </div>
-            <ul class="list">${warmup.items.map(item => `<li>${item}</li>`).join("")}</ul>
-          </article>
-
-          <article class="panel">
-            <h3>Execution Rules</h3>
-            <div class="chip-row" style="margin-bottom:12px">
-              ${day.patterns.map(pattern => `<span class="chip">${icons.target} ${pattern}</span>`).join("")}
-            </div>
-            <ul class="list">
-              <li>Visible wrist rule: Keep wrist neutral. If wrist discomfort is above 2/10, switch to the safer alternative.</li>
-              ${day.dayRules.map(rule => `<li>${rule}</li>`).join("")}
-              <li>Time budget: ${day.timeBudget}. Use listed supersets to stay inside 60 minutes.</li>
-            </ul>
-          </article>
+        <section class="panel">
+          <h3>${warmup.title}</h3>
+          <div class="chip-row" style="margin-bottom:12px">
+            <span class="chip">${icons.clock} ${warmup.time}</span>
+            <span class="chip warn">${icons.shield} Wrist neutral above everything</span>
+          </div>
+          <ul class="list">${warmup.items.map(item => `<li>${item}</li>`).join("")}</ul>
+          ${renderWarmupCards(warmup)}
         </section>
 
         <div class="reset-row">
@@ -1403,8 +1765,8 @@
                   <button class="timer-btn" type="button" data-timer="${ex.id}" data-seconds="${ex.timerSeconds}">
                     ${icons.clock} <span data-timer-label="${ex.id}">Start rest (${formatTime(ex.timerSeconds)})</span>
                   </button>
-                  <button class="icon-btn" type="button" aria-label="Reset timer" data-timer-reset="${ex.id}" data-seconds="${ex.timerSeconds}">
-                    ${icons.reset}
+                  <button class="ghost-btn timer-reset-btn" type="button" data-timer-reset="${ex.id}" data-seconds="${ex.timerSeconds}">
+                    ${icons.reset} Reset rest
                   </button>
                   <a class="primary-btn" href="${videoUrl}" target="_blank" rel="noopener noreferrer">
                     ${icons.video} Watch form video
@@ -1427,16 +1789,21 @@
         day.exercises.forEach(ex => {
           localStorage.removeItem(keyFor(day.id, ex.id, "complete"));
           localStorage.removeItem(keyFor(day.id, ex.id, "note"));
+          resetTimer(ex.id, ex.timerSeconds);
         });
         render();
       });
 
       app.querySelectorAll("[data-complete]").forEach(input => {
         input.addEventListener("change", event => {
+          const wasComplete = completionStats(day).pct === 100;
           const exId = event.target.dataset.complete;
           localStorage.setItem(keyFor(day.id, exId, "complete"), event.target.checked ? "true" : "false");
-          updateProgress(day);
+          const stats = updateProgress(day);
           renderDayStrip();
+          if (!wasComplete && stats.pct === 100) {
+            showCelebration(day);
+          }
         });
       });
 
@@ -1459,6 +1826,7 @@
       const stats = completionStats(day);
       document.getElementById("progressText").textContent = `${stats.done}/${stats.total} complete`;
       document.getElementById("progressBar").style.width = `${stats.pct}%`;
+      return stats;
     }
 
     function toggleTimer(id, seconds) {
@@ -1515,57 +1883,75 @@
       timerIntervals = {};
     }
 
-    function renderProgression() {
-      app.innerHTML = `
-        <section class="hero">
-          <div class="hero-grid">
-            <div>
-              <span class="eyebrow">${icons.trend} Progression</span>
-              <h2>5-6 Week Progression</h2>
-              <p class="hero-copy">Use RPE 7-8 most of the time. RPE 9 only occasionally on final accessory sets. Never RPE 9 on wrist-sensitive movements.</p>
-            </div>
-            <div class="panel">
-              <h3>Wrist Safety Rule</h3>
-              <p>Keep wrist neutral. If wrist discomfort is above 2/10, switch to the safer alternative.</p>
-            </div>
+    function showCelebration(day) {
+      const existing = document.querySelector(".celebration-overlay");
+      if (existing) existing.remove();
+
+      const variant = celebrationTypes[Math.floor(Math.random() * celebrationTypes.length)];
+      const overlay = document.createElement("div");
+      overlay.className = "celebration-overlay";
+      overlay.innerHTML = `
+        <article class="celebration-card" role="dialog" aria-modal="true" aria-label="${escapeAttr(variant.title)}">
+          <div class="celebration-graphic">
+            ${renderCelebrationGraphic(variant.type)}
           </div>
-        </section>
+          <div class="celebration-card-body">
+            <h2>${variant.title}</h2>
+            <p>${day.name} is complete. ${variant.message}</p>
+            <button class="ghost-btn" type="button" data-close-celebration>${icons.check} Done</button>
+          </div>
+        </article>
+      `;
+      document.body.appendChild(overlay);
+      overlay.querySelector("[data-close-celebration]").focus();
+      overlay.addEventListener("click", event => {
+        if (event.target === overlay || event.target.closest("[data-close-celebration]")) {
+          overlay.remove();
+        }
+      });
+      window.setTimeout(() => {
+        if (document.body.contains(overlay)) overlay.remove();
+      }, 5200);
+    }
 
-        <section class="progression-grid">
-          <article class="progress-card">
-            <h3>Weekly Ramp</h3>
-            <div class="week-grid">
-              ${progression.weeks.map(([week, text]) => `<div class="week"><strong>${week}</strong><span>${text}</span></div>`).join("")}
-            </div>
-          </article>
-
-          <article class="content-grid">
-            <div class="progress-card">
-              <h3>When To Increase Weight</h3>
-              <ul class="list">${progression.increase.map(item => `<li>${item}</li>`).join("")}</ul>
-            </div>
-            <div class="progress-card">
-              <h3>When To Reduce Weight</h3>
-              <ul class="list">${progression.reduce.map(item => `<li>${item}</li>`).join("")}</ul>
-            </div>
-          </article>
-
-          <article class="content-grid">
-            <div class="progress-card">
-              <h3>Deload Rule</h3>
-              <ul class="list">${progression.deload.map(item => `<li>${item}</li>`).join("")}</ul>
-            </div>
-            <div class="progress-card">
-              <h3>Why This Version Works</h3>
-              <p>${progression.design}</p>
-            </div>
-          </article>
-        </section>
+    function renderCelebrationGraphic(type) {
+      if (type === "plate") {
+        return `<div class="plate">100</div>`;
+      }
+      if (type === "meter") {
+        return `<div class="meter"><span></span></div>`;
+      }
+      return `
+        <div class="ring"></div>
+        <div class="mark"></div>
+        ${[0, 45, 90, 135, 180, 225, 270, 315].map(deg => `<span class="burst" style="--r:${deg}deg"></span>`).join("")}
       `;
     }
 
     function illustrationDataUrl(ex, index) {
       const svg = makeIllustrationSvg(ex, index);
+      return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+    }
+
+    function warmupFallbackDataUrl(move) {
+      const name = escapeSvg(move.name);
+      const cue = escapeSvg(move.cue);
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 360" role="img" aria-label="${name}">
+          <defs>
+            <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#eef2ec"/>
+              <stop offset="100%" stop-color="#d9e0d7"/>
+            </linearGradient>
+          </defs>
+          <rect width="520" height="360" fill="url(#g)"/>
+          <circle cx="260" cy="128" r="42" fill="#111412"/>
+          <path d="M260 170v76M220 196h80M238 246l-58 58M282 246l58 58" stroke="#111412" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M96 286h328" stroke="#9df05b" stroke-width="14" stroke-linecap="round"/>
+          <text x="32" y="46" fill="#111412" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="900">${truncateSvg(name, 28)}</text>
+          <text x="32" y="326" fill="#30362f" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">${truncateSvg(cue, 48)}</text>
+        </svg>
+      `;
       return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
     }
 
@@ -1686,18 +2072,7 @@
       return clean.length > max ? `${clean.slice(0, max - 3)}...` : clean;
     }
 
-    workoutViewBtn.addEventListener("click", () => {
-      currentView = "workout";
-      localStorage.setItem(`${storagePrefix}:view`, currentView);
-      render();
-    });
-
-    progressionViewBtn.addEventListener("click", () => {
-      currentView = "progression";
-      localStorage.setItem(`${storagePrefix}:view`, currentView);
-      render();
-    });
-
+    bindThemePicker();
     render();
   </script>
 </body>
